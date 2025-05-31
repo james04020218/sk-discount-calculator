@@ -176,7 +176,10 @@
                         <label class="toggle-switch"><input type="checkbox" id="mvnoSktDetailsToggle"><span class="slider"></span></label>
                         <span class="ml-1 text-xs text-slate-500">(상세보기)</span>
                     </div>
-                    </div>
+                     <div class="flex items-center">
+                        <label class="radio-label"><input type="radio" name="discountType" value="noBundleDiscount" class="radio-input"> 결합 할인 없음</label>
+                        </div>
+                </div>
                 <div class="input-group mt-6">
                     <label class="input-label">결합 적용 시점 (월 청구요금 표시 방식)</label>
                     <div class="space-y-2">
@@ -387,7 +390,7 @@
         // --- New JSON Data Structure ---
         const jsonData = {
             "internetPlans_base": [{"id": "internet_100m_standalone","name": "100M 인터넷 (단독)","price": 22000,"speed_mbps": 100,"note": "단독 기본료"}, {"id": "internet_500m_standalone","name": "500M 인터넷 (단독)","price": 33000,"speed_mbps": 500,"note": "단독 기본료"}, {"id": "internet_1g_standalone","name": "1GB 인터넷 (단독)","price": 38500,"speed_mbps": 1000,"note": "단독 기본료"}],
-            "internetPlans_tv_bundle_prices": [{"id": "internet_100m_with_tv","name": "100M 인터넷 (TV 결합 시)","price": 22000,"speed_mbps": 100,"note": "TV 결합 시 인터넷 최종가 추정"}, {"id": "internet_500m_with_tv","name": "500M 인터넷 (TV 결합 시)","price": 27500,"speed_mbps": 500,"note": "TV 결합 시 인터넷 최종가 추정"}, {"id": "internet_1g_with_tv","name": "1GB 인터넷 (TV 결합 시)","price": 33000,"speed_mbps": 1000,"note": "TV 결합 시 인터넷 최종가 추정"}],
+            "internetPlans_tv_bundle_prices": [{"id": "internet_100m_with_tv","name": "100M 인터넷 (TV 결합 시)","price": 19800,"speed_mbps": 100,"note": "TV 결합 시 인터넷 최종가 추정"}, {"id": "internet_500m_with_tv","name": "500M 인터넷 (TV 결합 시)","price": 27500,"speed_mbps": 500,"note": "TV 결합 시 인터넷 최종가 추정"}, {"id": "internet_1g_with_tv","name": "1GB 인터넷 (TV 결합 시)","price": 33000,"speed_mbps": 1000,"note": "TV 결합 시 인터넷 최종가 추정"}],
             "tvPackages": [{"id": "tv_economy_smart3","name": "B tv 이코노미 (183채널) + 스마트3","price": 14300,"channels": 183,"stb": "스마트3"}, {"id": "tv_standard_smart3","name": "B tv 스탠다드 (234채널) + 스마트3","price": 17600,"channels": 234,"stb": "스마트3"}, {"id": "tv_all_smart3","name": "B tv ALL (257채널) + 스마트3","price": 20900,"channels": 257,"stb": "스마트3"}, {"id": "tv_standard_netflix_2p","name": "B tv 스탠다드 넷플릭스 (2인/1080p)","price": 29900,"note": "동시시청 2인/해상도 1080p","base_tv_plan": "스탠다드","netflix_tier": "스탠다드"}, {"id": "tv_standard_netflix_premium_4p","name": "B tv 스탠다드 넷플릭스 프리미엄 (4인/4K+HDR)","price": 32900,"note": "동시시청 4인/해상도 4K+HDR","base_tv_plan": "스탠다드","netflix_tier": "프리미엄"}, {"id": "tv_all_netflix_2p","name": "B tv ALL 넷플릭스 (2인/1080p)","price": 32400,"note": "동시시청 2인/해상도 1080p","base_tv_plan": "ALL","netflix_tier": "스탠다드"}, {"id": "tv_all_netflix_premium_4p","name": "B tv ALL 넷플릭스 프리미엄 (4인/4K+HDR)","price": 35400,"note": "동시시청 4인/해상도 4K+HDR","base_tv_plan": "ALL","netflix_tier": "프리미엄"}],
             "additionalTvPackages": [{"id": "addtv_economy_smart3","name": "추가TV 이코노미 (183채널) + 스마트3","price": 8250}, {"id": "addtv_economy_apple","name": "추가TV 이코노미 (애플셋탑)","price": 8250}, {"id": "addtv_standard_smart3","name": "추가TV 스탠다드 (234채널) + 스마트3","price": 9900}, {"id": "addtv_standard_apple","name": "추가TV 스탠다드 (애플셋탑)","price": 9900}, {"id": "addtv_all_smart3","name": "추가TV ALL (257채널) + 스마트3","price": 11550}, {"id": "addtv_all_apple","name": "추가TV ALL (애플셋탑)","price": 11550}],
             "phonePlans": [{"id": "phone_landline","name": "일반 전화","price": 1100}, {"id": "phone_070_internet_only_no_device_rental","name": "070 전화 (인터넷+전화 / 단말기 대여 X)","price": 4400,"condition": "인터넷+전화, 단말기 대여 X"}, {"id": "phone_070_internet_tv_no_device_rental","name": "070 전화 (인터넷+TV+전화 / 단말기 대여 X)","price": 2200,"condition": "인터넷+TV+전화, 단말기 대여 X"}],
@@ -575,14 +578,15 @@
             { radioValue: '요즘가족결합', toggleEl: yozoomGajokDetailsToggleEl, containerEl: yozoomGajokDetailsContainerEl, updateFn: updateYozoomGajokDetails },
             { radioValue: '온가족할인', toggleEl: onGajokDetailsToggleEl, containerEl: onGajokDetailsContainerEl, updateFn: updateOnGajokDetails },
             { radioValue: '패밀리결합', toggleEl: familySktDetailsToggleEl, containerEl: familySktDetailsContainerEl, updateFn: updateFamilySktDetails },
-            { radioValue: '알뜰한 결합', toggleEl: mvnoSktDetailsToggleEl, containerEl: mvnoSktDetailsContainerEl, updateFn: updateMvnoSktDetails } 
+            { radioValue: '알뜰한 결합', toggleEl: mvnoSktDetailsToggleEl, containerEl: mvnoSktDetailsContainerEl, updateFn: updateMvnoSktDetails },
+            { radioValue: 'noBundleDiscount', toggleEl: null, containerEl: null, updateFn: null } // For "결합 할인 없음"
         ];
 
         discountTypeRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 onGajokYearsGroupEl.classList.toggle('hidden', this.value !== '온가족할인');
                 allDetailSectionsSkt.forEach(section => {
-                    if (section.containerEl) {
+                    if (section.containerEl) { // "결합 할인 없음"은 containerEl이 null
                         let isVisible = false;
                         if (this.value === section.radioValue) { 
                             if (section.toggleEl) { 
@@ -596,6 +600,10 @@
                             isVisible = false; 
                         }
                         section.containerEl.classList.toggle('hidden', !isVisible);
+                    } else if (this.value !== section.radioValue && section.toggleEl) { 
+                        // 다른 할인 유형의 토글 스위치 끄기
+                        section.toggleEl.checked = false;
+                        if(section.containerEl) section.containerEl.classList.add('hidden');
                     }
                 });
                  if (!resultSection.classList.contains('hidden')) { calculateAndDisplayResults(); } 
@@ -664,7 +672,7 @@
             let internetSpeedType = "";
             if (internetPlanInfo.speed_mbps === 100) internetSpeedType = "100M";
             else if (internetPlanInfo.speed_mbps === 500) internetSpeedType = "500M";
-            else if (internetPlanInfo.speed_mbps >= 1000) internetSpeedType = "1GB";
+            else if (internetPlanInfo.speed_mbps >= 1000) internetSpeedType = "1GB"; // 1G 이상은 1GB로 통일
             
             let discountCondition = "";
             if (internetSpeedType) {
@@ -901,7 +909,7 @@
                 phoneComponentCost = phonePlan.price;
             }
 
-            if (baseInternetPlan) { 
+            if (baseInternetPlan && discountType !== "noBundleDiscount") { 
                 if (discountType === "온가족할인") {
                     const rate = onGajokConfig.internetDiscountRate[selectedYearsKeyOnGajok] || 0;
                     internetDiscountAmount = Math.floor(internetBasePrice * rate); 
@@ -929,9 +937,9 @@
                     }
                 }
                 internetDiscountAmount = Math.min(internetBasePrice, internetDiscountAmount);
-            } else {
+            } else { // 인터넷 미선택 또는 "결합 할인 없음" 선택
                 internetDiscountAmount = 0; 
-                internetDiscountBreakdownText = "";
+                internetDiscountBreakdownText = discountType === "noBundleDiscount" ? "(결합 할인 없음)" : "";
             }
 
 
@@ -1029,7 +1037,7 @@
             selectedPhoneEl.textContent = phonePlan ? phonePlan.name : '미선택';
             selectedMobileCountEl.textContent = numMobileLines;
             
-            const discountTypeMapSkt = {"요즘가족결합": "요즘가족결합","온가족할인": "온가족할인", "패밀리결합": "패밀리결합", "알뜰한 결합": "알뜰한 결합"};
+            const discountTypeMapSkt = {"요즘가족결합": "요즘가족결합","온가족할인": "온가족할인", "패밀리결합": "패밀리결합", "알뜰한 결합": "알뜰한 결합", "noBundleDiscount": "결합 할인 없음"};
             selectedDiscountTypeEl.textContent = discountTypeMapSkt[discountType] || discountType;
 
             onGajokYearsResultContainerEl.classList.toggle('hidden', discountType !== '온가족할인');
