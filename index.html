@@ -11,7 +11,7 @@
         .input-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #334155; /* slate-700 */ }
         .input-field, .select-field { width: 100%; padding: 0.5rem 0.75rem; border: 1px solid #cbd5e1; /* slate-300 */ border-radius: 0.375rem; box-shadow: sm; transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
         .input-field:focus, .select-field:focus { border-color: #ef4444; /* red-500 */ outline: none; box-shadow: 0 0 0 0.2rem rgba(239, 68, 68, 0.25); } /* SK Red focus */
-        .select-field:disabled { background-color: #e9e9e9; /* Slightly darker gray for disabled */ cursor: not-allowed; opacity: 0.7; }
+        .select-field:disabled, .input-field:disabled { background-color: #e9e9e9; /* Slightly darker gray for disabled */ cursor: not-allowed; opacity: 0.7; }
         .btn-primary { background-color: #ef4444; /* red-500 */ color: white; padding: 0.75rem 1.5rem; border-radius: 0.375rem; font-weight: 600; transition: background-color 0.3s ease; }
         .btn-primary:hover { background-color: #dc2626; /* red-600 */ }
         .btn-secondary { background-color: #f97316; /* orange-500 */ color: white; padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 500; transition: background-color 0.3s ease; }
@@ -69,6 +69,18 @@
                 <p class="mt-2">
                     참고 스프레드시트: <a href="https://docs.google.com/spreadsheets/d/10d21RrhIPBiJr7RZIHnk0h1dB4GvTEcHCuXSyFYw1M4/edit?gid=0#gid=0" target="_blank">바로가기</a>
                 </p>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label">인터넷 유형 선택</label>
+                <div class="flex items-center space-x-4">
+                    <label class="radio-label">
+                        <input type="radio" name="internetType" value="bundle" class="radio-input" checked> 인터넷 + TV 번들
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="internetType" value="standalone" class="radio-input"> 인터넷 단독
+                    </label>
+                </div>
             </div>
 
             <p class="mb-6 text-sm text-slate-600">아래 항목들을 선택하거나 입력해주세요. 모든 요금은 SK브로드밴드/SK텔레콤 표준 3년 약정, 부가세 포함 금액을 기준으로 합니다.</p>
@@ -206,6 +218,7 @@
                         <p class="font-bold mt-2">인터넷 할인 (JSON 기반):</p><ul id="yozoomGajokInternetDiscountTiers"></ul>
                         <p class="font-bold mt-2">휴대폰 할인 (인터넷 속도 및 회선 수 기반, 참고용 - 기존 로직 유지):</p><ul id="yozoomGajokMobileDiscountTiers"></ul>
                         <p class="font-bold mt-2">동거인 결합 가능:</p><ul><li>결합 대표자 기준 주민등록상 동일 주소 동거인 1인 가족 할인 대상 인정 (예비부부, 동거부부, 친구 등 등본상 동거인).</li></ul>
+                        <p class="font-bold mt-2">예시:</p><ul><li>아버지 명의 SK 핸드폰 개통 후 요즘 가족 결합/온가족할인 추가 가능 (모바일 명의 같이 들어와야 함.)</li></ul>
                         <p class="mt-2 text-red-500 font-bold">참고: 모바일 할인액은 선택약정 등 타 할인과 중복 여부 SKT 확인 필요.</p>
                     </div>
                 </div>
@@ -221,6 +234,7 @@
                         <p class="font-bold mt-2">인터넷 할인 (가입 연수별 %):</p><ul id="onGajokInternetDiscountTiers"></ul>
                         <p class="font-bold mt-2">휴대폰 할인:</p><ul><li>총 가입 연수 20년 이상 시: 대표 모바일 회선 월정액의 10% 할인.</li><li>총 가입 연수 30년 이상 시: 대표 모바일 회선 월정액의 30% 할인.</li><li>(선택약정할인과 중복 가능)</li></ul>
                         <p class="font-bold mt-2">동거인 결합 가능:</p><ul><li>결합 대표자 기준 주민등록상 동일 주소 동거인 1인 가족 할인 대상 인정.</li></ul>
+                        <p class="font-bold mt-2">예시:</p><ul><li>아버지 명의 SK 핸드폰 개통 후 요즘 가족 결합/온가족할인 추가 가능 (모바일 명의 같이 들어와야 함.)</li></ul>
                     </div>
                 </div>
                 <div id="familySktDetailsContainer" class="mt-3 hidden discount-details">
@@ -232,6 +246,7 @@
                         <p class="font-bold mt-2">조건:</p><ul><li>본인 또는 직계가족 명의로 다른 장소에 SK 인터넷 회선이 있어야 함.</li></ul>
                         <p class="font-bold mt-2">회선 구성:</p><ul><li>모회선 1회선 + 자회선 1회선.</li></ul>
                         <p class="font-bold mt-2">할인액 (JSON 기반, 자회선 기준):</p><ul id="familyInternetDiscountTiers"></ul>
+                        <p class="font-bold mt-2">예시:</p><ul><li>아버지 명의 SK 인터넷 추가 하고 싶어함 --&gt; 요즘 가족 결합 또는 온가족 할인 불가 , 패밀리 결합 진행</li></ul>
                         <p class="font-bold mt-2">유의사항:</p><ul><li>모회선 1년 유지 필수, 미유지 시 할인액 반환.</li><li>10개월 이내 해지 시 사은품 환수 가능.</li></ul>
                         <p class="font-bold mt-2">결합 방법:</p><ul><li>SKT: 본인 신분증, 모회선 가족관계증명서, 모회선 정보로 선결합 가능.</li><li>SKB 본인 패밀리: SKT와 동일, 선결합 가능.</li><li>SKB 타인 패밀리: 본사를 통한 후결합만 가능.</li></ul>
                     </div>
@@ -405,6 +420,28 @@
             if (!itemId || itemId === 'none') return null;
             return itemList.find(item => item.id === itemId) || null;
         }
+        
+        function updateTvSubOptionsState() {
+            const selectedInternetType = document.querySelector('input[name="internetType"]:checked').value;
+            const isInternetStandalone = selectedInternetType === 'standalone';
+            const isFirstTvPlanSelected = tvPlanEl.value !== 'none';
+
+            // TV 관련 옵션은 (인터넷이 TV결합형이고) && (첫번째 TV 요금제가 선택되었을 때) 활성화
+            const enableTvSubOptions = !isInternetStandalone && isFirstTvPlanSelected;
+
+            tvStbEl.disabled = !enableTvSubOptions;
+            additionalTvPlanEl.disabled = !enableTvSubOptions;
+            phonePlanEl.disabled = isInternetStandalone; // 인터넷 단독시 집전화 비활성화
+
+            if (!enableTvSubOptions) {
+                tvStbEl.value = 'none';
+                additionalTvPlanEl.value = 'none';
+            }
+            if (isInternetStandalone) {
+                phonePlanEl.value = 'none';
+            }
+        }
+
 
         // --- Existing Configs (OnGajok, Gifts) to be potentially adjusted or used alongside new JSON ---
         const onGajokConfig = { // Percentage applies to (InternetBase - TV bundle discount if any)
@@ -430,6 +467,7 @@
         };
         
         // DOM Elements 
+        const internetTypeRadios = document.querySelectorAll('input[name="internetType"]');
         const internetPlanEl = document.getElementById('internetPlan');
         const wifiRouterEl = document.getElementById('wifiRouter');
         const tvPlanEl = document.getElementById('tvPlan');
@@ -507,7 +545,25 @@
 
 
         // --- Populate Select Options ---
-        function populateSelectWithOptions(selectElement, items, defaultOptionText = "선택 안함", valueField = 'id', nameField = 'name', priceField = 'price', noteField = 'note', isBundleDatasetField = null) {
+        function populateInternetPlansDropdown() {
+            const selectedType = document.querySelector('input[name="internetType"]:checked').value;
+            let plansToShow;
+            if (selectedType === 'bundle') {
+                plansToShow = jsonData.internetPlans_tv_bundle_prices;
+            } else {
+                plansToShow = jsonData.internetPlans_base;
+            }
+            populateSelectWithOptions(internetPlanEl, plansToShow, "선택 안함", 'id', 'name', 'price', 'note');
+            if (plansToShow.length > 0) {
+                 internetPlanEl.value = plansToShow[0].id; 
+            } else {
+                internetPlanEl.value = 'none';
+            }
+            handleInternetTypeChange(); 
+        }
+
+
+        function populateSelectWithOptions(selectElement, items, defaultOptionText = "선택 안함", valueField = 'id', nameField = 'name', priceField = 'price', noteField = 'note') {
             if (!selectElement) {
                 console.error("Select element not found for population:", selectElement);
                 return;
@@ -522,9 +578,9 @@
             items.forEach(item => {
                 const option = document.createElement('option');
                 option.value = item[valueField];
-                let displayText = item[nameField];
+                let displayText = item[nameField]; 
 
-                if (isBundleDatasetField === null) { 
+                if (selectElement !== internetPlanEl) { 
                     if (item[priceField] !== undefined && item[priceField] > 0) { 
                          displayText += ` (월 ${item[priceField].toLocaleString()}원)`;
                     } else if (item[noteField] && item.price === 0) { 
@@ -541,36 +597,36 @@
                 if(item.channels) option.dataset.channels = item.channels;
                 if(item.stb) option.dataset.defaultStb = item.stb; 
                 if(item.note) option.dataset.note = item.note;
-                if (isBundleDatasetField !== null && item.hasOwnProperty('isBundle')) { 
-                    option.dataset.isBundle = item.isBundle;
-                }
-
+                
                 selectElement.appendChild(option);
             });
         }
 
         function initializeSelects() {
-            const allInternetPlans = [];
-            jsonData.internetPlans_base.forEach(p => allInternetPlans.push({...p, isBundle: 'false'})); 
-            jsonData.internetPlans_tv_bundle_prices.forEach(p => allInternetPlans.push({...p, isBundle: 'true'})); 
-            populateSelectWithOptions(internetPlanEl, allInternetPlans, "선택 안함", 'id', 'name', 'price', 'note', 'isBundle'); 
+            populateInternetPlansDropdown(); 
             
             const wifiOptions = jsonData.addOnServices.filter(s => s.name.includes("와이파이") || s.name.includes("공유기"));
             populateSelectWithOptions(wifiRouterEl, wifiOptions, "공유기 선택 안함(X)", 'id', 'name', 'price', 'note');
-            
+            wifiRouterEl.value = "wifi_router_default";
+
             const specialStbOptions = jsonData.addOnServices.filter(s => s.type === "AI STB" || (s.type === "STB" && s.id !== 'apple_tv_stb_promo') ); 
             const applePromoStb = jsonData.addOnServices.find(s => s.id === 'apple_tv_stb_promo');
             if (applePromoStb) specialStbOptions.push(applePromoStb); 
             populateSelectWithOptions(tvStbEl, specialStbOptions, "선택 안함 (기본셋톱 사용)", 'id', 'name', 'price', 'note');
             
             populateSelectWithOptions(tvPlanEl, jsonData.tvPackages, "선택 안함", 'id', 'name', 'price');
-            
+            tvPlanEl.value = jsonData.tvPackages[0]?.id || "none";
+
             populateSelectWithOptions(additionalTvPlanEl, jsonData.additionalTvPackages, "선택 안함", 'id', 'name', 'price');
             populateSelectWithOptions(phonePlanEl, jsonData.phonePlans, "선택 안함", 'id', 'name', 'price');
         }
 
 
         // Event Listeners
+        internetTypeRadios.forEach(radio => {
+            radio.addEventListener('change', populateInternetPlansDropdown);
+        });
+
         mobileLinesCountEl.addEventListener('input', updateMobileLinesInputs);
         calculateButton.addEventListener('click', calculateAndDisplayResults);
         
@@ -593,11 +649,15 @@
             radio.addEventListener('change', function() {
                 onGajokYearsGroupEl.classList.toggle('hidden', this.value !== '온가족할인');
                 
-                if (this.value === 'noBundleDiscount') {
+                if (this.value === 'noBundleDiscount' || this.value === '패밀리결합') {
                     mobileLinesCountEl.value = 0;
-                } else if (this.value === '요즘가족결합') {
-                    if (parseInt(mobileLinesCountEl.value) === 0) {
-                        mobileLinesCountEl.value = 1;
+                    mobileLinesCountEl.disabled = true;
+                } else {
+                    mobileLinesCountEl.disabled = false;
+                    if (this.value === '요즘가족결합' || this.value === '온가족할인' || this.value === '알뜰한 결합') {
+                         if (parseInt(mobileLinesCountEl.value) === 0) {
+                            mobileLinesCountEl.value = 1;
+                        }
                     }
                 }
                 updateMobileLinesInputs(); 
@@ -640,39 +700,25 @@
             }
         });
         
-        function updateTvSubOptionsState() {
-            const selectedInternetOption = internetPlanEl.options[internetPlanEl.selectedIndex];
-            const isInternetTvBundle = selectedInternetOption && selectedInternetOption.dataset.isBundle === 'true';
-            const isFirstTvPlanSelected = tvPlanEl.value !== 'none';
+        function handleInternetTypeChange() {
+            const selectedInternetType = document.querySelector('input[name="internetType"]:checked').value;
+            const isStandaloneInternet = selectedInternetType === 'standalone';
 
-            const enableTvSubOptions = isInternetTvBundle && isFirstTvPlanSelected;
+            tvPlanEl.disabled = isStandaloneInternet;
+            phonePlanEl.disabled = isStandaloneInternet; // Disable phone plan for standalone internet
 
-            tvStbEl.disabled = !enableTvSubOptions;
-            additionalTvPlanEl.disabled = !enableTvSubOptions;
-
-            if (!enableTvSubOptions) {
-                tvStbEl.value = 'none';
-                additionalTvPlanEl.value = 'none';
+            if (isStandaloneInternet) {
+                tvPlanEl.value = 'none'; 
+                phonePlanEl.value = 'none';
             }
+            // Let tvPlanEl's change event handle its sub-options (tvStbEl, additionalTvPlanEl)
+            const tvChangeEvent = new Event('change');
+            tvPlanEl.dispatchEvent(tvChangeEvent); // This will call updateTvSubOptionsState
         }
 
 
         internetPlanEl.addEventListener('change', () => {
-            const selectedOption = internetPlanEl.options[internetPlanEl.selectedIndex];
-            const isTvBundleInternet = selectedOption.dataset.isBundle === 'true';
-
-            tvPlanEl.disabled = !isTvBundleInternet;
-
-            if (!isTvBundleInternet) { // Standalone internet selected
-                tvPlanEl.value = 'none'; 
-                // Manually trigger change for tvPlanEl to ensure sub-options are disabled
-                const tvChangeEvent = new Event('change');
-                tvPlanEl.dispatchEvent(tvChangeEvent);
-            } else {
-                // If a TV-bundle internet is selected, ensure TV sub-options are correctly enabled/disabled based on tvPlanEl's current value
-                updateTvSubOptionsState();
-            }
-
+            handleInternetTypeChange(); 
             if (!resultSection.classList.contains('hidden')) { calculateAndDisplayResults(); }
         });
 
@@ -880,7 +926,7 @@
         // --- Main Calculation Logic ---
         function calculateAndDisplayResults() {
             const selectedInternetId = internetPlanEl.value;
-            const selectedInternetOptionEl = internetPlanEl.options[internetPlanEl.selectedIndex];
+            const selectedInternetTypeRadio = document.querySelector('input[name="internetType"]:checked').value;
             
             const selectedWifiId = wifiRouterEl.value;
             const selectedTvPackageId = tvPlanEl.value;
@@ -908,8 +954,11 @@
 
             let finalInternetPlan = null; 
             if (selectedInternetId !== 'none') {
-                finalInternetPlan = findItemById(jsonData.internetPlans_base, selectedInternetId) || 
-                                    findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId);
+                if (selectedInternetTypeRadio === 'bundle') {
+                    finalInternetPlan = findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId);
+                } else {
+                    finalInternetPlan = findItemById(jsonData.internetPlans_base, selectedInternetId);
+                }
             }
             
             const tvPackage = findItemById(jsonData.tvPackages, selectedTvPackageId);
@@ -920,7 +969,7 @@
             } else { 
                 internetBasePrice = 0;
                 internetComponentCost = 0;
-                finalInternetPlan = { price: 0, speed_mbps: 0, name: "미선택" }; // Ensure finalInternetPlan is always an object
+                finalInternetPlan = { price: 0, speed_mbps: 0, name: "미선택" }; 
             }
 
 
@@ -1158,7 +1207,7 @@
             generateMessageScriptsSkt(selectedBundleApplicationTime); 
         }
         
-        function generateMessageScriptsSkt(currentSelectedBundleApplicationTime) { // Pass selectedBundleApplicationTime
+        function generateMessageScriptsSkt(currentSelectedBundleApplicationTime) { 
             const selectedInternetId = internetPlanEl.value;
             const internetOption = internetPlanEl.options[internetPlanEl.selectedIndex];
             const internetPlanText = internetOption.value !== 'none' ? internetOption.textContent.split(' (월')[0] : '인터넷 미선택';
@@ -1186,7 +1235,6 @@
 
 
             const displayedMonthlyFee = finalMonthlyCostEl.textContent; 
-            // const selectedBundleAppTime = document.querySelector('input[name="bundleApplicationTime"]:checked').value; // Use passed parameter
             const actualInternetDiscount = parseInt(totalInternetDiscountAmountEl.textContent.replace(/,/g, '')) || 0;
             
             let monthlyFeeText = `월 ${displayedMonthlyFee}원`;
@@ -1338,16 +1386,30 @@ https://miso.kr/booking/forms/secure-details?querystring=고객님 전화번호`
             const noBundleDiscountRadio = document.querySelector('input[name="discountType"][value="noBundleDiscount"]');
             if (noBundleDiscountRadio) {
                 noBundleDiscountRadio.checked = true;
-                const event = new Event('change', { bubbles: true });
-                noBundleDiscountRadio.dispatchEvent(event);
+                const discountChangeEvent = new Event('change', { bubbles: true });
+                noBundleDiscountRadio.dispatchEvent(discountChangeEvent);
             }
+            
+            const internetTypeStandaloneRadio = document.querySelector('input[name="internetType"][value="standalone"]');
+            if (internetTypeStandaloneRadio) { 
+                internetTypeStandaloneRadio.checked = true;
+            }
+            populateInternetPlansDropdown(); 
+            handleInternetTypeChange(); 
 
-            internetPlanEl.value = jsonData.internetPlans_base[0]?.id || 'none';
+            const firstStandaloneInternet = jsonData.internetPlans_base[0]?.id;
+             if (internetPlanEl.querySelector(`option[value="${firstStandaloneInternet}"]`)) {
+                internetPlanEl.value = firstStandaloneInternet;
+            } else if (jsonData.internetPlans_base.length > 0) {
+                 internetPlanEl.value = jsonData.internetPlans_base[0].id;
+            } else {
+                 internetPlanEl.value = 'none';
+            }
             const internetPlanChangeEvent = new Event('change'); 
             internetPlanEl.dispatchEvent(internetPlanChangeEvent); 
 
 
-            tvPlanEl.value = jsonData.tvPackages[0]?.id || 'none';
+            tvPlanEl.value = 'none'; 
             wifiRouterEl.value = "wifi_router_default"; 
             tvStbEl.value = 'none'; 
             additionalTvPlanEl.value = 'none';
