@@ -426,12 +426,11 @@
             const isInternetStandalone = selectedInternetType === 'standalone';
             const isFirstTvPlanSelected = tvPlanEl.value !== 'none';
 
-            // TV 관련 옵션은 (인터넷이 TV결합형이고) && (첫번째 TV 요금제가 선택되었을 때) 활성화
             const enableTvSubOptions = !isInternetStandalone && isFirstTvPlanSelected;
 
             tvStbEl.disabled = !enableTvSubOptions;
             additionalTvPlanEl.disabled = !enableTvSubOptions;
-            phonePlanEl.disabled = isInternetStandalone; // 인터넷 단독시 집전화 비활성화
+            phonePlanEl.disabled = isInternetStandalone; 
 
             if (!enableTvSubOptions) {
                 tvStbEl.value = 'none';
@@ -444,7 +443,7 @@
 
 
         // --- Existing Configs (OnGajok, Gifts) to be potentially adjusted or used alongside new JSON ---
-        const onGajokConfig = { // Percentage applies to (InternetBase - TV bundle discount if any)
+        const onGajokConfig = { 
             internetDiscountRate: {"0_9": 0.10, "10_19": 0.20, "20_29": 0.30, "30_plus": 0.50},
             mobileDiscountRate: {"0_9": 0, "10_19": 0, "20_29": 0.10, "30_plus": 0.30} 
         };
@@ -705,20 +704,20 @@
             const isStandaloneInternet = selectedInternetType === 'standalone';
 
             tvPlanEl.disabled = isStandaloneInternet;
-            phonePlanEl.disabled = isStandaloneInternet; // Disable phone plan for standalone internet
+            phonePlanEl.disabled = isStandaloneInternet; 
 
             if (isStandaloneInternet) {
                 tvPlanEl.value = 'none'; 
                 phonePlanEl.value = 'none';
             }
-            // Let tvPlanEl's change event handle its sub-options (tvStbEl, additionalTvPlanEl)
-            const tvChangeEvent = new Event('change');
-            tvPlanEl.dispatchEvent(tvChangeEvent); // This will call updateTvSubOptionsState
+            updateTvSubOptionsState();
         }
 
 
         internetPlanEl.addEventListener('change', () => {
-            handleInternetTypeChange(); 
+            // When internet plan changes, it might affect TV bundle status indirectly if the plan list changes
+            // However, the primary control for TV options is the internetTypeRadio and tvPlanEl itself.
+            // So, just ensure calculation updates.
             if (!resultSection.classList.contains('hidden')) { calculateAndDisplayResults(); }
         });
 
@@ -760,9 +759,14 @@
         
         function updateYozoomGajokDetails() {
             const selectedInternetId = internetPlanEl.value;
-            const internetPlanInfo = findItemById(jsonData.internetPlans_base, selectedInternetId) || 
-                                     findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId) || 
-                                     { speed_mbps: 0, price: 0 };
+            const selectedInternetType = document.querySelector('input[name="internetType"]:checked').value;
+            let internetPlanInfo;
+            if (selectedInternetType === 'bundle') {
+                internetPlanInfo = findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId) || { speed_mbps: 0, price: 0 };
+            } else {
+                internetPlanInfo = findItemById(jsonData.internetPlans_base, selectedInternetId) || { speed_mbps: 0, price: 0 };
+            }
+
             const tvSelectedId = tvPlanEl.value;
             const tvPackage = findItemById(jsonData.tvPackages, tvSelectedId);
             const numMobileLines = parseInt(mobileLinesCountEl.value) || 0;
@@ -820,8 +824,13 @@
 
         function updateOnGajokDetails() {
             const selectedInternetId = internetPlanEl.value;
-            let internetPlanForCalc = findItemById(jsonData.internetPlans_base, selectedInternetId) || 
-                                      findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId);
+            const selectedInternetType = document.querySelector('input[name="internetType"]:checked').value;
+            let internetPlanForCalc;
+             if (selectedInternetType === 'bundle') {
+                internetPlanForCalc = findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId);
+            } else {
+                internetPlanForCalc = findItemById(jsonData.internetPlans_base, selectedInternetId);
+            }
             if (!internetPlanForCalc) return;
 
             const internetPriceForCalc = internetPlanForCalc.price;
@@ -847,9 +856,14 @@
 
         function updateFamilySktDetails() { 
             const selectedInternetId = internetPlanEl.value;
-            const internetPlanInfo = findItemById(jsonData.internetPlans_base, selectedInternetId) || 
-                                     findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId) || 
-                                     { speed_mbps: 0 };
+            const selectedInternetType = document.querySelector('input[name="internetType"]:checked').value;
+            let internetPlanInfo;
+            if (selectedInternetType === 'bundle') {
+                internetPlanInfo = findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId) || { speed_mbps: 0 };
+            } else {
+                internetPlanInfo = findItemById(jsonData.internetPlans_base, selectedInternetId) || { speed_mbps: 0 };
+            }
+
             const tvSelectedId = tvPlanEl.value;
             const tvPackage = findItemById(jsonData.tvPackages, tvSelectedId);
 
@@ -886,9 +900,13 @@
 
         function updateMvnoSktDetails() { 
             const selectedInternetId = internetPlanEl.value;
-            const internetPlanInfo = findItemById(jsonData.internetPlans_base, selectedInternetId) || 
-                                     findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId) || 
-                                     { speed_mbps: 0 };
+            const selectedInternetType = document.querySelector('input[name="internetType"]:checked').value;
+            let internetPlanInfo;
+            if (selectedInternetType === 'bundle') {
+                internetPlanInfo = findItemById(jsonData.internetPlans_tv_bundle_prices, selectedInternetId) || { speed_mbps: 0 };
+            } else {
+                internetPlanInfo = findItemById(jsonData.internetPlans_base, selectedInternetId) || { speed_mbps: 0 };
+            }
             const tvSelectedId = tvPlanEl.value;
             const tvPackage = findItemById(jsonData.tvPackages, tvSelectedId);
 
@@ -1322,7 +1340,7 @@ ${productDescriptionComplete}
 ▶️ ${monthlyFeeText}
 ▶️ 설치비 ${installFee}원 ${installFeeDesc} 첫 달 부과 ${installTime === 'weekday' ? '' : `(주말/야간 설치 시 할증된 설치비 부과 가능성 - SKB 확인)`}
 ▶️ 총 사은품 ${totalGift}원 (${giftBreakdown}) (예상)
-✅ 사은품은 설치 후 영업일 기준 7일 이내 순차 지급됩니다. 설치 후 개통 완료 문자를 보내주시면 확인 후 최대한 빠른 지급 도와드리겠습니다.
+✅사은품은 설치 후 7일 이내 자동으로 지급되나 평일기준 5시 이전 개통 받았다고 문자 주시면 당일입금 도움드리겠습니다.
 ${installTime !== 'weekday' ? `-> 주말/야간 설치 시 할증된 설치비는 ${installFee}원 부과될 수 있습니다 (SKB 확인 필요).` : ''}
 🔊 해당 연락처로 연락이 어려울 경우 걱정하지 마세요! 아래 대표번호로 문의주시면 확인하여 연락드리겠습니다.
 [미소를 소개해주세요]
