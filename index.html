@@ -941,6 +941,7 @@
     
     
     function updateMobileLinesInputs() {
+        const discountType = document.querySelector('input[name="discountType"]:checked').value; // Get discount type inside
         const count = parseInt(mobileLinesCountEl.value) || 0;
         mobileLinesContainerEl.innerHTML = '';
         for (let i = 0; i < count; i++) {
@@ -956,6 +957,14 @@
             select.id = `mobilePlan${i}`;
             select.className = 'select-field';
             
+            // Add "요금제 선택없음" for the first line
+            if (i === 0) {
+                const noPlanOption = document.createElement('option');
+                noPlanOption.value = 'none';
+                noPlanOption.textContent = '요금제 선택없음';
+                select.appendChild(noPlanOption);
+            }
+
             allMobilePlans.forEach(plan => {
                 const option = document.createElement('option');
                 option.value = plan.id;
@@ -963,8 +972,13 @@
                 select.appendChild(option);
             });
             
-            const defaultPlanId = allMobilePlans.find(p => p.name === 'T플랜세이브' && p.price === 33000)?.id || allMobilePlans[0]?.id;
-            select.value = defaultPlanId;
+            // Set default value
+            if (i === 0 && (discountType === '요즘가족결합' || discountType === '온가족할인')) {
+                 select.value = 'none';
+            } else {
+                 const defaultPlanId = allMobilePlans.find(p => p.name === 'T플랜세이브' && p.price === 33000)?.id || allMobilePlans[0]?.id;
+                 select.value = defaultPlanId;
+            }
     
             const contractDiv = document.createElement('div');
             contractDiv.className = 'mt-2';
@@ -1403,7 +1417,7 @@
             for (let i = 0; i < numMobileLines; i++) {
                 const mobilePlanSelect = document.getElementById(`mobilePlan${i}`);
                 const contractCheckbox = document.getElementById(`selectiveContractCheck${i}`);
-                if (!mobilePlanSelect) continue;
+                if (!mobilePlanSelect || mobilePlanSelect.value === 'none') continue; // Skip if 'none' is selected
     
                 const selectedPlan = allMobilePlans.find(p => p.id === mobilePlanSelect.value);
                 if (!selectedPlan) continue;
@@ -1668,7 +1682,7 @@
         if (tvPackage) {
             firstTvText = tvPackage.name.split(' (')[0];
             if (additionalStb) {
-                firstTvText += ` + ${additionalStb.name.split(' (')[0]}`;
+                firstTvText += ` + (추가) ${additionalStb.name.split(' (')[0]}`;
             }
         }
 
@@ -1736,10 +1750,34 @@ ${wiredScript}` +
         const installFee = installationCostResultEl.textContent; 
 
         let productDescriptionMemo = internetPlanText;
-        if (wifiPackage && wifiPackage.id !== 'wifi_router_not_selected') productDescriptionMemo += ` + ${wifiPackage.name.split(' (')[0]}`;
-        if (tvPackage) productDescriptionMemo += ` + ${firstTvText}`;
-        if (additionalTvPackage) productDescriptionMemo += ` + ${additionalTvPackage.name.split(' (')[0]}`;
-        if (phonePackage) productDescriptionMemo += ` + ${phonePackage.name.split(' (')[0]}`;
+        if (wifiPackage && wifiPackage.id !== 'wifi_router_not_selected') {
+            productDescriptionMemo += ` + ${wifiPackage.name.split(' (')[0]}`;
+        }
+
+        if (tvPackage) {
+            let tvBaseName = tvPackage.name.split(' (')[0];
+            let stbName = "";
+
+            if (additionalStb) {
+                stbName = additionalStb.name.split(' (')[0];
+            } else if (tvPackage.stb) {
+                stbName = tvPackage.stb;
+            } else if (tvPackage.name.includes("스마트3")) {
+                stbName = "스마트3";
+            }
+            
+            productDescriptionMemo += ` + ${tvBaseName}`;
+            if (stbName) {
+                productDescriptionMemo += ` + ${stbName}`;
+            }
+        }
+        
+        if (additionalTvPackage) {
+             productDescriptionMemo += ` + (추가TV) ${additionalTvPackage.name.split(' (')[0]}`;
+        }
+        if (phonePackage) {
+            productDescriptionMemo += ` + ${phonePackage.name.split(' (')[0]}`;
+        }
 
         const discountType = document.querySelector('input[name="discountType"]:checked').value;
         let bundleTypeText = "";
@@ -1750,7 +1788,9 @@ ${wiredScript}` +
         let mobilePlansText = "해당 없음";
         if (numMobileLines > 0) {
             const planNames = perLineDiscounts.map(item => item.plan.name);
-            mobilePlansText = planNames.join(', ');
+            if(planNames.length > 0) {
+               mobilePlansText = planNames.join(', ');
+            }
         }
 
         const baekmegaMemo = `\n\n<백메가 기타 메모 양식>
