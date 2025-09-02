@@ -153,7 +153,7 @@
                     <option value="30_plus">30년 이상</option>
                 </select>
             </div>
-            <!-- NEW: Internet Usage Period for On-Gajok Discount -->
+            
             <div class="input-group mt-6 hidden" id="internetUsageYearsGroup">
                 <label for="internetUsageYears" class="input-label">인터넷 사용 기간 (온가족 할인용)</label>
                 <select id="internetUsageYears" class="select-field">
@@ -162,6 +162,7 @@
                     <option value="2_3">2년 이상 ~ 3년 미만</option>
                     <option value="3_plus" selected>3년 이상</option>
                 </select>
+                <p class="text-xs text-slate-500 mt-1">(기존 SK 인터넷 사용 기간이 있다면 합산하여 선택하세요)</p>
             </div>
         </section>
 
@@ -309,7 +310,6 @@
             </div>
         </section>
 
-        <!-- 신규: 제휴카드 할인 섹션 -->
         <section id="affiliateCardSection" class="mb-8">
             <h2 class="section-title">4. 제휴카드 추가 할인 (선택)</h2>
             <div class="bg-white p-6 rounded-lg shadow">
@@ -318,14 +318,12 @@
                         <label for="affiliateCardSelect" class="input-label">제휴카드 선택</label>
                         <select id="affiliateCardSelect" class="select-field">
                             <option value="none">선택 안함</option>
-                            <!-- Options will be populated by JS -->
-                        </select>
+                            </select>
                     </div>
                     <div class="input-group hidden" id="cardTierGroup">
                         <label for="cardTierSelect" class="input-label">전월 실적 구간 선택</label>
                         <select id="cardTierSelect" class="select-field">
-                            <!-- Tiers will be populated by JS -->
-                        </select>
+                            </select>
                     </div>
                 </div>
                 <div class="info-box mt-4">
@@ -346,6 +344,14 @@
 
         <section id="resultSection" class="hidden">
             <h2 class="section-title">📊 계산 결과</h2>
+            
+            <div id="suggestionBar" class="hidden p-4 mb-6 bg-blue-50 border-l-4 border-blue-400 text-blue-700 rounded-md">
+                <p class="font-bold">🎉 더 유리한 할인 조합을 찾았어요!</p>
+                <p class="mt-1">잠깐! 할인 유형을 '<strong id="suggestionName" class="underline"></strong>'(으)로 변경하시면 <strong id="suggestionBenefit" class="underline"></strong> 추가로 아낄 수 있습니다!</p>
+                <div class="text-right mt-2">
+                    <button id="suggestionButton" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-3 rounded text-sm transition-colors">추천 할인으로 변경 후 다시 계산</button>
+                </div>
+            </div>
             
             <div class="bg-slate-50 p-6 rounded-lg mb-6 border border-slate-200">
                 <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">✅ 최종 요금 및 혜택 요약</h3>
@@ -376,7 +382,7 @@
             <div class="text-center mb-6">
                <button id="toggleDetailsButton" class="text-sm text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 py-2 px-4 rounded-full transition-colors">
                 상세 요금 내역 펼쳐보기 ▼
-                </button>
+               </button>
             </div>
 
             <div id="detailsContainer" class="hidden">
@@ -418,7 +424,6 @@
                     <hr class="my-2 border-slate-200">
                     <p class="result-label text-green-600 summary-item">월 총 인터넷 결합 할인액 (예상): <span id="totalInternetDiscountAmount" class="result-value text-green-600">0</span> 원</p>
                     <p class="text-xs text-slate-500 ml-2 mb-2" id="internetDiscountBreakdown"></p>
-                    <!-- 신규: 제휴카드 할인 내역 -->
                     <div id="cardDiscountSummaryContainer" class="hidden">
                         <p class="result-label text-green-600 summary-item">월 제휴카드 추가 할인: <span id="totalCardDiscountAmount" class="result-value text-green-600">0</span> 원</p>
                         <p class="text-xs text-slate-500 ml-2 mb-2" id="cardDiscountBreakdown"></p>
@@ -455,131 +460,129 @@
         </section>
         
         <section id="messageScriptSection" class="hidden mt-12">
-    <h2 class="section-title">📄 고객 안내 문자 스크립트 (상담원 참고용)</h2>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">1. 전산 메모</h3>
-        <textarea id="memoScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container"><button onclick="copyToClipboard('memoScript', 'copyFeedbackMemo')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackMemo" class="copy-feedback"></span></div>
-    </div>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">2. 상품 안내 문자</h3>
-        <div class="mb-3 text-right">
-            <button id="generateComparisonButton" class="btn-secondary text-xs py-1 px-3">⚡ 100M vs 500M 비교 스크립트 생성</button>
-        </div>
-        <textarea id="infoScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container"><button onclick="copyToClipboard('infoScript', 'copyFeedbackInfo')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackInfo" class="copy-feedback"></span></div>
-    </div>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">3. 가입 완료 문자</h3>
-        <textarea id="completeScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container"><button onclick="copyToClipboard('completeScript', 'copyFeedbackComplete')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackComplete" class="copy-feedback"></span></div>
-    </div>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">4. 유심 접수 완료 안내 (고객용)</h3>
-        <textarea id="usimDongpanCompleteScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container"><button onclick="copyToClipboard('usimDongpanCompleteScript', 'copyFeedbackUsimComplete')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackUsimComplete" class="copy-feedback"></span></div>
-    </div>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">5. 민감정보 전송용 링크 (고객 발송용)</h3>
-        <textarea id="sensitiveInfoLinkScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container">
-            <button onclick="copyToClipboard('sensitiveInfoLinkScript', 'copyFeedbackSensitiveInfo')" class="btn-secondary text-xs">복사하기</button>
-            <span id="copyFeedbackSensitiveInfo" class="copy-feedback"></span>
-        </div>
-    </div>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">6. 1년 vs 3년 약정 최종 비용(TCO) 비교</h3>
-        <div class="flex space-x-2 mb-4">
-            <button id="generateTco100MbpsButton" class="w-full text-white font-semibold py-2 px-4 rounded-lg bg-pink-500 hover:bg-pink-600 transition-colors">100Mbps 비교 스크립트 생성</button>
-            <button id="generateTco500MbpsButton" class="w-full text-white font-semibold py-2 px-4 rounded-lg bg-slate-500 hover:bg-slate-600 transition-colors">500Mbps 비교 스크립트 생성</button>
-        </div>
-        <textarea id="tcoComparisonResultScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container">
-            <button onclick="copyToClipboard('tcoComparisonResultScript', 'copyFeedbackTco')" class="btn-secondary text-xs">복사하기</button>
-            <span id="copyFeedbackTco" class="copy-feedback"></span>
-        </div>
-    </div>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">7. SK 위약금 산정 방식 상세 분석</h3>
-        <textarea id="penaltyAnalysisScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container">
-            <button onclick="copyToClipboard('penaltyAnalysisScript', 'copyFeedbackPenalty')" class="btn-secondary text-xs">복사하기</button>
-            <span id="copyFeedbackPenalty" class="copy-feedback"></span>
-        </div>
-    </div>
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">8. 위약금 면제 조건 총정리</h3>
-        <textarea id="waiverInfoScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container">
-            <button onclick="copyToClipboard('waiverInfoScript', 'copyFeedbackWaiver')" class="btn-secondary text-xs">복사하기</button>
-            <span id="copyFeedbackWaiver" class="copy-feedback"></span>
-        </div>
-    </div>
-
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3 border-t pt-4 mt-4">9. 상담 내용으로 AI 설득 문자 생성</h3>
-        <p class="text-sm text-slate-600 mb-3">아래에 고객과의 상담 내용을 입력하고, '고급 설정'을 조절하여 상황에 맞는 최적의 설득 문자를 생성해 보세요.</p>
-        
-        <textarea id="aiConsultationInput" class="message-script-area" rows="8" placeholder="이곳에 '생각해볼게요'라고 말한 고객과의 상담 내용을 붙여넣으세요... (고객의 불편함, 원하는 점, 망설이는 이유 등이 잘 나타날수록 좋습니다.)"></textarea>
-        
-        <details class="mt-4 mb-4">
-            <summary class="cursor-pointer text-slate-600 hover:text-slate-800 font-semibold">
-                🤖 AI 고급 설정 펼쳐보기 ▼
-            </summary>
-            <div class="mt-3 p-4 border rounded-md bg-slate-50 grid md:grid-cols-2 gap-4">
-                <div class="input-group !mb-0">
-                    <label for="aiRoleInput" class="input-label">역할 (Persona)</label>
-                    <input type="text" id="aiRoleInput" class="input-field" value="15년 경력의 통신비 절약 컨설턴트">
+            <h2 class="section-title">📄 고객 안내 문자 스크립트 (상담원 참고용)</h2>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">1. 전산 메모</h3>
+                <textarea id="memoScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container"><button onclick="copyToClipboard('memoScript', 'copyFeedbackMemo')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackMemo" class="copy-feedback"></span></div>
+            </div>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">2. 상품 안내 문자</h3>
+                <div class="mb-3 text-right space-x-2">
+                    <button id="generateBundleComparisonButton" class="btn-secondary text-xs py-1 px-3">⚡ 요가결 vs 온할 비교 스크립트 생성</button>
+                    <button id="generateComparisonButton" class="btn-secondary text-xs py-1 px-3">⚡ 100M vs 500M 비교 스크립트 생성</button>
                 </div>
-                <div class="input-group !mb-0">
-                    <label for="aiToneSelect" class="input-label">어조 (Tone)</label>
-                    <select id="aiToneSelect" class="select-field">
-                        <option value="따뜻하고 공감적인">따뜻하고 공감적인</option>
-                        <option value="전문적이고 신뢰감 있는" selected>전문적이고 신뢰감 있는</option>
-                        <option value="활기차고 친근한">활기차고 친근한</option>
-                    </select>
-                </div>
-                <div class="input-group !mb-0">
-                    <label for="aiAudienceInput" class="input-label">대상 고객 특징 (Audience)</label>
-                    <input type="text" id="aiAudienceInput" class="input-field" placeholder="예: 가격에 민감한 20대 학생">
-                </div>
-                <div class="input-group !mb-0">
-                    <label for="aiEmotionInput" class="input-label">공략할 감정/가치 (Emotion)</label>
-                    <input type="text" id="aiEmotionInput" class="input-field" placeholder="예: 잦은 끊김으로 인한 답답함">
-                </div>
-                <div class="input-group !mb-0 md:col-span-2">
-                    <label for="aiStructureSelect" class="input-label">설득 구조 (Structure)</label>
-                    <select id="aiStructureSelect" class="select-field">
-                        <option value="문제 제기 -> 원인 분석 -> 해결 방안 제시">문제 제기 → 원인 분석 → 해결 방안 제시</option>
-                        <option value="공감 -> 핵심 혜택 강조 -> 결정 촉구" selected>공감 → 핵심 혜택 강조 → 결정 촉구</option>
-                    </select>
+                <textarea id="infoScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container"><button onclick="copyToClipboard('infoScript', 'copyFeedbackInfo')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackInfo" class="copy-feedback"></span></div>
+            </div>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">3. 가입 완료 문자</h3>
+                <textarea id="completeScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container"><button onclick="copyToClipboard('completeScript', 'copyFeedbackComplete')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackComplete" class="copy-feedback"></span></div>
+            </div>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">4. 유심 접수 완료 안내 (고객용)</h3>
+                <textarea id="usimDongpanCompleteScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container"><button onclick="copyToClipboard('usimDongpanCompleteScript', 'copyFeedbackUsimComplete')" class="btn-secondary text-xs">복사하기</button><span id="copyFeedbackUsimComplete" class="copy-feedback"></span></div>
+            </div>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">5. 민감정보 전송용 링크 (고객 발송용)</h3>
+                <textarea id="sensitiveInfoLinkScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container">
+                    <button onclick="copyToClipboard('sensitiveInfoLinkScript', 'copyFeedbackSensitiveInfo')" class="btn-secondary text-xs">복사하기</button>
+                    <span id="copyFeedbackSensitiveInfo" class="copy-feedback"></span>
                 </div>
             </div>
-        </details>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">6. 1년 vs 3년 약정 최종 비용(TCO) 비교</h3>
+                <div class="flex space-x-2 mb-4">
+                    <button id="generateTco100MbpsButton" class="w-full text-white font-semibold py-2 px-4 rounded-lg bg-pink-500 hover:bg-pink-600 transition-colors">100Mbps 비교 스크립트 생성</button>
+                    <button id="generateTco500MbpsButton" class="w-full text-white font-semibold py-2 px-4 rounded-lg bg-slate-500 hover:bg-slate-600 transition-colors">500Mbps 비교 스크립트 생성</button>
+                </div>
+                <textarea id="tcoComparisonResultScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container">
+                    <button onclick="copyToClipboard('tcoComparisonResultScript', 'copyFeedbackTco')" class="btn-secondary text-xs">복사하기</button>
+                    <span id="copyFeedbackTco" class="copy-feedback"></span>
+                </div>
+            </div>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">7. SK 위약금 산정 방식 상세 분석</h3>
+                <textarea id="penaltyAnalysisScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container">
+                    <button onclick="copyToClipboard('penaltyAnalysisScript', 'copyFeedbackPenalty')" class="btn-secondary text-xs">복사하기</button>
+                    <span id="copyFeedbackPenalty" class="copy-feedback"></span>
+                </div>
+            </div>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">8. 위약금 면제 조건 총정리</h3>
+                <textarea id="waiverInfoScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container">
+                    <button onclick="copyToClipboard('waiverInfoScript', 'copyFeedbackWaiver')" class="btn-secondary text-xs">복사하기</button>
+                    <span id="copyFeedbackWaiver" class="copy-feedback"></span>
+                </div>
+            </div>
 
-        <div class="text-center mt-4">
-            <button id="generateAiScriptButton" class="btn-primary text-lg">
-                🤖 AI 설득 문자 생성하기
-            </button>
-        </div>
-    </div>
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3 border-t pt-4 mt-4">9. 상담 내용으로 AI 설득 문자 생성</h3>
+                <p class="text-sm text-slate-600 mb-3">아래에 고객과의 상담 내용을 입력하고, '고급 설정'을 조절하여 상황에 맞는 최적의 설득 문자를 생성해 보세요.</p>
+                
+                <textarea id="aiConsultationInput" class="message-script-area" rows="8" placeholder="이곳에 '생각해볼게요'라고 말한 고객과의 상담 내용을 붙여넣으세요... (고객의 불편함, 원하는 점, 망설이는 이유 등이 잘 나타날수록 좋습니다.)"></textarea>
+                
+                <details class="mt-4 mb-4">
+                    <summary class="cursor-pointer text-slate-600 hover:text-slate-800 font-semibold">
+                        🤖 AI 고급 설정 펼쳐보기 ▼
+                    </summary>
+                    <div class="mt-3 p-4 border rounded-md bg-slate-50 grid md:grid-cols-2 gap-4">
+                        <div class="input-group !mb-0">
+                            <label for="aiRoleInput" class="input-label">역할 (Persona)</label>
+                            <input type="text" id="aiRoleInput" class="input-field" value="15년 경력의 통신비 절약 컨설턴트">
+                        </div>
+                        <div class="input-group !mb-0">
+                            <label for="aiToneSelect" class="input-label">어조 (Tone)</label>
+                            <select id="aiToneSelect" class="select-field">
+                                <option value="따뜻하고 공감적인">따뜻하고 공감적인</option>
+                                <option value="전문적이고 신뢰감 있는" selected>전문적이고 신뢰감 있는</option>
+                                <option value="활기차고 친근한">활기차고 친근한</option>
+                            </select>
+                        </div>
+                        <div class="input-group !mb-0">
+                            <label for="aiAudienceInput" class="input-label">대상 고객 특징 (Audience)</label>
+                            <input type="text" id="aiAudienceInput" class="input-field" placeholder="예: 가격에 민감한 20대 학생">
+                        </div>
+                        <div class="input-group !mb-0">
+                            <label for="aiEmotionInput" class="input-label">공략할 감정/가치 (Emotion)</label>
+                            <input type="text" id="aiEmotionInput" class="input-field" placeholder="예: 잦은 끊김으로 인한 답답함">
+                        </div>
+                        <div class="input-group !mb-0 md:col-span-2">
+                            <label for="aiStructureSelect" class="input-label">설득 구조 (Structure)</label>
+                            <select id="aiStructureSelect" class="select-field">
+                                <option value="문제 제기 -> 원인 분석 -> 해결 방안 제시">문제 제기 → 원인 분석 → 해결 방안 제시</option>
+                                <option value="공감 -> 핵심 혜택 강조 -> 결정 촉구" selected>공감 → 핵심 혜택 강조 → 결정 촉구</option>
+                            </select>
+                        </div>
+                    </div>
+                </details>
 
-    <div class="result-card">
-        <h3 class="text-xl font-semibold text-orange-600 mb-3">AI 추천 설득 스크립트</h3>
-        <div id="aiLoadingIndicator" class="hidden text-center">
-            <div class="loader"></div>
-            <p class="text-slate-600">AI가 고객님의 마음을 얻을 설득 스크립트를 작성하고 있습니다...</p>
-        </div>
-        <textarea id="aiResultScript" class="message-script-area" readonly></textarea>
-        <div class="copy-button-container">
-            <button onclick="copyToClipboard('aiResultScript', 'copyFeedbackAiScript')" class="btn-secondary text-xs">복사하기</button>
-            <span id="copyFeedbackAiScript" class="copy-feedback"></span>
-        </div>
-    </div>
-    </section>
+                <div class="text-center mt-4">
+                    <button id="generateAiScriptButton" class="btn-primary text-lg">
+                        🤖 AI 설득 문자 생성하기
+                    </button>
+                </div>
+            </div>
 
-        
-
+            <div class="result-card">
+                <h3 class="text-xl font-semibold text-orange-600 mb-3">AI 추천 설득 스크립트</h3>
+                <div id="aiLoadingIndicator" class="hidden text-center">
+                    <div class="loader"></div>
+                    <p class="text-slate-600">AI가 고객님의 마음을 얻을 설득 스크립트를 작성하고 있습니다...</p>
+                </div>
+                <textarea id="aiResultScript" class="message-script-area" readonly></textarea>
+                <div class="copy-button-container">
+                    <button onclick="copyToClipboard('aiResultScript', 'copyFeedbackAiScript')" class="btn-secondary text-xs">복사하기</button>
+                    <span id="copyFeedbackAiScript" class="copy-feedback"></span>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="text-center p-6 mt-12 bg-red-700 text-red-100 text-sm">
@@ -612,7 +615,6 @@
         ]
     };
 
-
     // --- New JSON Data Structure ---
     const jsonData = {
         "internetPlans_base": [{"id": "internet_100m_standalone","name": "100M 인터넷 (단독)","price": 22000,"speed_mbps": 100,"note": "단독 기본료"}, {"id": "internet_500m_standalone","name": "500M 인터넷 (단독)","price": 33000,"speed_mbps": 500,"note": "단독 기본료"}, {"id": "internet_1g_standalone","name": "1GB 인터넷 (단독)","price": 38500,"speed_mbps": 1000,"note": "단독 기본료"}],
@@ -620,20 +622,20 @@
         "tvPackages": [{"id": "tv_economy_smart3","name": "B tv 이코노미 (183채널) + 스마트3","price": 14300,"channels": 183,"stb": "스마트3"}, {"id": "tv_standard_smart3","name": "B tv 스탠다드 (234채널) + 스마트3","price": 17600,"channels": 234,"stb": "스마트3"}, {"id": "tv_all_smart3","name": "B tv ALL (257채널) + 스마트3","price": 20900,"channels": 257,"stb": "스마트3"}, {"id": "tv_standard_netflix_2p","name": "B tv 스탠다드 넷플릭스 (2인/1080p)","price": 29900,"note": "동시시청 2인/해상도 1080p","base_tv_plan": "스탠다드","netflix_tier": "스탠다드"}, {"id": "tv_standard_netflix_premium_4p","name": "B tv 스탠다드 넷플릭스 프리미엄 (4인/4K+HDR)","price": 32900,"note": "동시시청 4인/해상도 4K+HDR","base_tv_plan": "스탠다드","netflix_tier": "프리미엄"}, {"id": "tv_all_netflix_2p","name": "B tv ALL 넷플릭스 (2인/1080p)","price": 32400,"note": "동시시청 2인/해상도 1080p","base_tv_plan": "ALL","netflix_tier": "스탠다드"}, {"id": "tv_all_netflix_premium_4p","name": "B tv ALL 넷플릭스 프리미엄 (4인/4K+HDR)","price": 35400,"note": "동시시청 4인/해상도 4K+HDR","base_tv_plan": "ALL","netflix_tier": "프리미엄"}],
         "additionalTvPackages": [{"id": "addtv_economy_smart3","name": "추가TV 이코노미 (183채널) + 스마트3","price": 8250}, {"id": "addtv_economy_apple","name": "추가TV 이코노미 (애플셋탑)","price": 8250}, {"id": "addtv_standard_smart3","name": "추가TV 스탠다드 (234채널) + 스마트3","price": 9900}, {"id": "addtv_standard_apple","name": "추가TV 스탠다드 (애플셋탑)","price": 9900}, {"id": "addtv_all_smart3","name": "추가TV ALL (257채널) + 스마트3","price": 11550}, {"id": "addtv_all_apple","name": "추가TV ALL (애플셋탑)","price": 11550}],
         "phonePlans": [
-            {"id": "phone_landline_new", "name": "일반 전화", "price": 1100},
-            {"id": "phone_070_basic_new", "name": "070 전화 (인터넷+전화 기본 요금제 / 단말기 대여 X)", "price": 1100},
-            {"id": "phone_070_free_internet_new", "name": "070 전화 (인터넷+집전화 프리 요금제 / 단말기 대여 X)", "price": 4400},
-            {"id": "phone_070_free_internet_tv_new", "name": "070 전화 (인터넷+TV+집전화 프리 요금제 / 단말기 대여 X)", "price": 2200}
+            { "id": "phone_landline_new", "name": "일반 전화", "price": 1100 },
+            { "id": "phone_070_basic_new", "name": "070 전화 (인터넷+전화 기본 요금제 / 단말기 대여 X)", "price": 1100 },
+            { "id": "phone_070_free_internet_new", "name": "070 전화 (인터넷+집전화 프리 요금제 / 단말기 대여 X)", "price": 4400 },
+            { "id": "phone_070_free_internet_tv_new", "name": "070 전화 (인터넷+TV+집전화 프리 요금제 / 단말기 대여 X)", "price": 2200 }
         ],
         "addOnServices": [
             {"id": "wifi_router_default","name": "와이파이 공유기","price": 1100, "url": ""}, 
             {"id": "wifi_router_yozoom_100M_tv","name": "요즘우리집결합(인+티 100Mb) 시 공유기","price": 2200,"condition": "요즘우리집결합 인+티 100Mb", "url": ""}, 
             {"id": "wifi_router_not_selected","name": "공유기 선택 안함(X)","price": 0, "url": ""},
-            {"id": "wings_amplifier", "name": "WINGS (증폭기)", "price": 1650, "type": "STB"},
-            {"id": "nugu2_stb", "name": "Nugu2 (AI 셋톱박스)", "price": 2200, "type": "AI STB"},
-            {"id": "ai_soundbar_max_stb", "name": "AI 사운드바 맥스", "price": 6600, "type": "AI STB"},
-            {"id": "apple_tv_stb_promo", "name": "애플셋탑 (프로모션 진행 중)", "price": 0, "type": "STB", "note": "프로모션 확인 필요"},
-            {"id": "ai4_vision_stb", "name": "AI4 Vision", "price": 8800, "type": "STB"}
+            { "id": "wings_amplifier", "name": "WINGS (증폭기)", "price": 1650, "type": "STB"},
+            { "id": "nugu2_stb", "name": "Nugu2 (AI 셋톱박스)", "price": 2200, "type": "AI STB"},
+            { "id": "ai_soundbar_max_stb", "name": "AI 사운드바 맥스", "price": 6600, "type": "AI STB"},
+            { "id": "apple_tv_stb_promo", "name": "애플셋탑 (프로모션 진행 중)", "price": 0, "type": "STB", "note": "프로모션 확인 필요"},
+            { "id": "ai4_vision_stb", "name": "AI4 Vision", "price": 8800, "type": "STB"}
         ],
         "bundleInternetDiscounts": [{"bundle_name": "요즘가족결합","condition": "100M + TV","discount_amount": 3300}, {"bundle_name": "패밀리결합","condition": "100M + TV","discount_amount": 3300}, {"bundle_name": "알뜰한 결합","condition": "100M + TV","discount_amount": 3300}, {"bundle_name": "요즘가족결합","condition": "500M + TV","discount_amount": 6600}, {"bundle_name": "패밀리결합","condition": "500M + TV","discount_amount": 5500}, {"bundle_name": "알뜰한 결합","condition": "500M + TV","discount_amount": 6600}, {"bundle_name": "요즘가족결합","condition": "1GB + TV","discount_amount": 8800}, {"bundle_name": "패밀리결합","condition": "1GB + TV","discount_amount": 5500}, {"bundle_name": "알뜰한 결합","condition": "1GB + TV","discount_amount": 8800}, {"bundle_name": "요즘가족결합","condition": "100M (단독)","discount_amount": 4400}, {"bundle_name": "패밀리결합","condition": "100M (단독)","discount_amount": 5500}, {"bundle_name": "알뜰한 결합","condition": "100M (단독)","discount_amount": 4400}, {"bundle_name": "요즘가족결합","condition": "500M (단독)","discount_amount": 11000}, {"bundle_name": "패밀리결합","condition": "500M (단독)","discount_amount": 11000}, {"bundle_name": "알뜰한 결합","condition": "500M (단독)","discount_amount": 11000}, {"bundle_name": "요즘가족결합","condition": "1GB (단독)","discount_amount": 13200}, {"bundle_name": "패밀리결합","condition": "1GB (단독)","discount_amount": 11000}, {"bundle_name": "알뜰한 결합","condition": "1GB (단독)","discount_amount": 13200}],
         "installationFees": {
@@ -715,14 +717,12 @@
         }
     }
     
-    
     // --- Existing Configs (OnGajok, Gifts) ---
-    // UPDATED On-Gajok Discount Logic
     const onGajokDiscountConfig = {
         "internet_discount_rate": {
-            "0_9":    { "0_1": 0,    "1_2": 0,    "2_3": 0.05, "3_plus": 0.10 }, // 10년 미만
-            "10_19":  { "0_1": 0,    "1_2": 0,    "2_3": 0.10, "3_plus": 0.30 }, // 10년 이상 ~ 20년 미만
-            "20_29":  { "0_1": 0.05, "1_2": 0.10, "2_3": 0.20, "3_plus": 0.30 }, // 20년 이상 ~ 30년 미만
+            "0_9":   { "0_1": 0,    "1_2": 0,    "2_3": 0.05, "3_plus": 0.10 }, // 10년 미만
+            "10_19": { "0_1": 0,    "1_2": 0,    "2_3": 0.10, "3_plus": 0.30 }, // 10년 이상 ~ 20년 미만
+            "20_29": { "0_1": 0.05, "1_2": 0.10, "2_3": 0.20, "3_plus": 0.30 }, // 20년 이상 ~ 30년 미만
             "30_plus":{ "0_1": 0.10, "1_2": 0.20, "2_3": 0.30, "3_plus": 0.50 }  // 30년 이상
         },
         "mobileDiscountRate": { "0_9": 0, "10_19": 0, "20_29": 0.10, "30_plus": 0.30 } // Mobile discount remains the same
@@ -793,6 +793,12 @@
     const cardTierGroupEl = document.getElementById('cardTierGroup');
     const cardTierSelectEl = document.getElementById('cardTierSelect');
     
+    const suggestionBarEl = document.getElementById('suggestionBar');
+    const suggestionNameEl = document.getElementById('suggestionName');
+    const suggestionBenefitEl = document.getElementById('suggestionBenefit');
+    const suggestionButtonEl = document.getElementById('suggestionButton');
+    const generateBundleComparisonButton = document.getElementById('generateBundleComparisonButton');
+
     const summaryMonthlyCostEl = document.getElementById('summaryMonthlyCost');
     const summaryTotalGiftEl = document.getElementById('summaryTotalGift');
     const summaryInternetDiscountEl = document.getElementById('summaryInternetDiscount');
@@ -840,20 +846,17 @@
     const completeScriptEl = document.getElementById('completeScript');
     const usimDongpanCompleteScriptEl = document.getElementById('usimDongpanCompleteScript');
     const sensitiveInfoLinkScriptEl = document.getElementById('sensitiveInfoLinkScript');
-    // New script textareas
     const generateTco100MbpsButton = document.getElementById('generateTco100MbpsButton');
     const generateTco500MbpsButton = document.getElementById('generateTco500MbpsButton');
     const tcoComparisonResultScriptEl = document.getElementById('tcoComparisonResultScript');
     const penaltyAnalysisScriptEl = document.getElementById('penaltyAnalysisScript');
     const waiverInfoScriptEl = document.getElementById('waiverInfoScript');
     
-    // --- AI 기능 관련 DOM 요소 ---
     const aiConsultationInputEl = document.getElementById('aiConsultationInput');
     const generateAiScriptButtonEl = document.getElementById('generateAiScriptButton');
     const aiLoadingIndicatorEl = document.getElementById('aiLoadingIndicator');
     const aiResultScriptEl = document.getElementById('aiResultScript');
     
-    // --- 와이파이 선택 로직을 관리하는 헬퍼 함수 (수정됨) ---
     function manageWifiSelection() {
         const selectedInternetId = internetPlanEl.value;
         if (selectedInternetId === 'none') {
@@ -873,27 +876,24 @@
     
         const tvSelected = tvPlanEl.value !== 'none';
     
-        // "요즘우리집" 특별 와이파이 조건: 100M+TV결합+결합할인없음
         const isYozoomWifiCondition = internetPlanInfo &&
-                                        internetPlanInfo.speed_mbps === 100 &&
-                                        selectedInternetType === 'bundle' &&
-                                        tvSelected &&
-                                        selectedDiscountType === 'noBundleDiscount';
+                                          internetPlanInfo.speed_mbps === 100 &&
+                                          selectedInternetType === 'bundle' &&
+                                          tvSelected &&
+                                          selectedDiscountType === 'noBundleDiscount';
     
         if (isYozoomWifiCondition) {
-            wifiRouterEl.value = "wifi_router_yozoom_100M_tv"; // 2,200원 옵션
+            wifiRouterEl.value = "wifi_router_yozoom_100M_tv";
             wifiRouterEl.disabled = true;
         } else {
             wifiRouterEl.disabled = false;
-            // 다른 결합이 선택되었을 때, 만약 '요즘우리집' 공유기가 선택되어 있었다면 기본 공유기로 변경
             if (wifiRouterEl.value === 'wifi_router_yozoom_100M_tv') {
-                wifiRouterEl.value = "wifi_router_default"; // 1,100원 옵션
+                wifiRouterEl.value = "wifi_router_default";
             }
         }
     }
     
     
-    // --- 토글 상세 내용을 업데이트하는 함수 ---
     function updateVisibleDetails() {
         allDetailSectionsSkt.forEach(section => {
             if (section.toggleEl && section.toggleEl.checked && section.updateFn) {
@@ -903,7 +903,6 @@
     }
     
     
-    // --- Populate Select Options ---
     function populateInternetPlansDropdown() {
         const selectedType = document.querySelector('input[name="internetType"]:checked').value;
         let plansToShow;
@@ -1007,7 +1006,6 @@
     }
     
     
-    // Event Listeners
     internetTypeRadios.forEach(radio => {
         radio.addEventListener('change', () => {
             populateInternetPlansDropdown();
@@ -1022,14 +1020,16 @@
         updateVisibleDetails();
     });
     
-    calculateButton.addEventListener('click', () => {
+    calculateButton.addEventListener('click', async () => {
         const results = calculatePlanDetails();
-        displayResults(results);
+        await displayResults(results);
     });
 
     resetButton.addEventListener('click', setInitialDefaults);
     
     generateComparisonButton.addEventListener('click', generateComparisonScript);
+
+    generateBundleComparisonButton.addEventListener('click', generateBundleComparisonScript);
 
     toggleDetailsButtonEl.addEventListener('click', () => {
         const isHidden = detailsContainerEl.classList.toggle('hidden');
@@ -1060,7 +1060,7 @@
     discountTypeRadios.forEach(radio => {
         radio.addEventListener('change', function() {
             onGajokYearsGroupEl.classList.toggle('hidden', this.value !== '온가족할인');
-            internetUsageYearsGroupEl.classList.toggle('hidden', this.value !== '온가족할인'); // Toggle new group
+            internetUsageYearsGroupEl.classList.toggle('hidden', this.value !== '온가족할인');
             
             if (this.value === 'noBundleDiscount' || this.value === '패밀리결합' || this.value === '알뜰한 결합') {
                 mobileLinesCountEl.value = 0;
@@ -1172,13 +1172,11 @@
         });
     });
     
-    // --- AI 기능 이벤트 리스너 추가 ---
     generateAiScriptButtonEl.addEventListener('click', generateAIPersuasionScript);
     generateTco100MbpsButton.addEventListener('click', () => generateTcoScript('100M'));
     generateTco500MbpsButton.addEventListener('click', () => generateTcoScript('500M'));
 
     
-    // Functions
     function updateMobilePlanAvailability() {
         const isInternetStandalone = document.querySelector('input[name="internetType"][value="standalone"]').checked;
         const isDongpanChecked = dongpanSalesCheckEl.checked;
@@ -1207,7 +1205,7 @@
     
     
     function updateMobileLinesInputs() {
-        const discountType = document.querySelector('input[name="discountType"]:checked').value; // Get discount type inside
+        const discountType = document.querySelector('input[name="discountType"]:checked').value;
         const count = parseInt(mobileLinesCountEl.value) || 0;
         mobileLinesContainerEl.innerHTML = '';
         for (let i = 0; i < count; i++) {
@@ -1223,7 +1221,6 @@
             select.id = `mobilePlan${i}`;
             select.className = 'select-field';
             
-            // Add "요금제 선택없음" for the first line
             if (i === 0) {
                 const noPlanOption = document.createElement('option');
                 noPlanOption.value = 'none';
@@ -1238,7 +1235,6 @@
                 select.appendChild(option);
             });
             
-            // Set default value
             if (i === 0 && (discountType === '요즘가족결합' || discountType === '온가족할인')) {
                  select.value = 'none';
             } else {
@@ -1372,8 +1368,8 @@
     
         const internetPriceForCalc = standalonePlanForOnGajok.price; 
         const yearsKey = onGajokYearsEl.value;
-        const internetYearsKey = internetUsageYearsEl.value; // NEW
-        const internetDiscountRate = onGajokDiscountConfig.internet_discount_rate[yearsKey]?.[internetYearsKey] || 0; // UPDATED
+        const internetYearsKey = internetUsageYearsEl.value;
+        const internetDiscountRate = onGajokDiscountConfig.internet_discount_rate[yearsKey]?.[internetYearsKey] || 0;
         const mobileDiscountRate = onGajokDiscountConfig.mobileDiscountRate[yearsKey] || 0;
         const calculatedInternetDiscount = Math.floor(internetPriceForCalc * internetDiscountRate);
         
@@ -1405,7 +1401,7 @@
                 li.innerHTML = `${iYearsText}: <strong>${(rate * 100).toFixed(0)}%</strong> (${exampleDiscount.toLocaleString()}원) 할인`;
                 if(iYearsKey === internetYearsKey) {
                     li.style.fontWeight = 'bold';
-                    li.style.color = '#dc2626'; // SK Red
+                    li.style.color = '#dc2626';
                 }
                 subUl.appendChild(li);
             }
@@ -1523,8 +1519,8 @@
         }
     }
     
-    function calculatePlanDetails(forcedInternetPlanId = null) {
-        const selectedInternetId = forcedInternetPlanId ? forcedInternetPlanId : internetPlanEl.value;
+    function calculatePlanDetails(overrides = {}) {
+        const selectedInternetId = overrides.internetPlanId !== undefined ? overrides.internetPlanId : internetPlanEl.value;
         const selectedInternetTypeRadio = document.querySelector('input[name="internetType"]:checked').value;
         
         const selectedWifiId = wifiRouterEl.value;
@@ -1542,11 +1538,11 @@
     
         const numMobileLines = parseInt(mobileLinesCountEl.value) || 0;
         const isDongpanSalesChecked = dongpanSalesCheckEl.checked;
-        const discountType = document.querySelector('input[name="discountType"]:checked').value; 
+        const discountType = overrides.discountType !== undefined ? overrides.discountType : document.querySelector('input[name="discountType"]:checked').value; 
         const selectedBundleApplicationTime = document.querySelector('input[name="bundleApplicationTime"]:checked').value;
         const installationTime = document.querySelector('input[name="installationTime"]:checked').value; 
-        const selectedYearsKeyOnGajok = onGajokYearsEl.value;
-        const selectedInternetUsageKey = internetUsageYearsEl.value; // NEW
+        const selectedYearsKeyOnGajok = overrides.onGajokYearsKey !== undefined ? overrides.onGajokYearsKey : onGajokYearsEl.value;
+        const selectedInternetUsageKey = overrides.internetUsageYearsKey !== undefined ? overrides.internetUsageYearsKey : internetUsageYearsEl.value;
         
         let internetPriceAsSelectedByDropdown = 0; 
         let internetDiscountAmount = 0;
@@ -1566,7 +1562,7 @@
         if (finalInternetPlan) { 
             internetPriceAsSelectedByDropdown = finalInternetPlan.price;
         } else { 
-            finalInternetPlan = { price: 0, speed_mbps: 0, name: "미선택" }; 
+            finalInternetPlan = { id: 'none', price: 0, speed_mbps: 0, name: "미선택" }; 
         }
         
         let displayInternetBasePrice = internetPriceAsSelectedByDropdown; 
@@ -1626,10 +1622,10 @@
     
         if (finalInternetPlan && finalInternetPlan.price > 0 && discountType !== "noBundleDiscount") { 
             if (discountType === "온가족할인") {
-                let rate = 0; // UPDATED LOGIC START
+                let rate = 0;
                 if (onGajokDiscountConfig.internet_discount_rate[selectedYearsKeyOnGajok] && onGajokDiscountConfig.internet_discount_rate[selectedYearsKeyOnGajok][selectedInternetUsageKey] !== undefined) {
                     rate = onGajokDiscountConfig.internet_discount_rate[selectedYearsKeyOnGajok][selectedInternetUsageKey];
-                } // UPDATED LOGIC END
+                }
                 
                 internetDiscountAmount = Math.floor(calculationBaseForInternetDiscount * rate); 
                 internetDiscountBreakdownText = `(온가족할인 ${ (rate * 100).toFixed(0)}% of ${calculationBaseForInternetDiscount.toLocaleString()}원 적용)`;
@@ -1722,7 +1718,6 @@
             uiFinalMonthlyCostToDisplay = totalSumBeforeDiscountForAllServices;
         }
 
-        // --- Card Discount Calculation ---
         let cardDiscount = 0;
         let selectedCardName = null;
         let selectedCardTierLabel = null;
@@ -1910,6 +1905,7 @@
                 discountTypeName: discountTypeMapSkt[discountType] || discountType,
                 bundleApplicationTime: selectedBundleApplicationTime,
                 onGajokYearsKey: selectedYearsKeyOnGajok,
+                internetUsageYearsKey: selectedInternetUsageKey,
                 isDongpan: isDongpanSalesChecked,
                 numMobileLines: numMobileLines,
                 selectedCardName: selectedCardName,
@@ -1924,8 +1920,48 @@
         };
     }
 
-    function displayResults(results) {
-        // SUMMARY SECTION
+    async function findBestDiscountAlternative(currentResults) {
+        const currentDiscountType = currentResults.selectedOptions.discountType;
+        let alternativeType = null;
+        let alternativeName = '';
+
+        if (currentDiscountType === '요즘가족결합') {
+            alternativeType = '온가족할인';
+            alternativeName = '온가족할인';
+        } else if (currentDiscountType === '온가족할인') {
+            alternativeType = '요즘가족결합';
+            alternativeName = '요즘가족결합';
+        } else {
+            return { isBetter: false };
+        }
+
+        const simulationOverrides = {
+            discountType: alternativeType,
+            internetPlanId: currentResults.selectedOptions.internetPlan.id,
+            onGajokYearsKey: currentResults.selectedOptions.onGajokYearsKey,
+            internetUsageYearsKey: currentResults.selectedOptions.internetUsageYearsKey
+        };
+
+        const alternativeResults = calculatePlanDetails(simulationOverrides);
+
+        const currentBenefit = currentResults.internetDiscountAmount + currentResults.totalMobileDiscount;
+        const alternativeBenefit = alternativeResults.internetDiscountAmount + alternativeResults.totalMobileDiscount;
+
+        const savings = alternativeBenefit - currentBenefit;
+        
+        if (savings > 500) {
+            return {
+                isBetter: true,
+                name: alternativeName,
+                value: alternativeType,
+                benefitText: `월 ${savings.toLocaleString()}원 상당의 통신비를`
+            };
+        }
+
+        return { isBetter: false };
+    }
+
+    async function displayResults(results) {
         summaryMonthlyCostEl.textContent = `${results.finalMonthlyCost.toLocaleString()}원`;
         const monthlyCostContainer = summaryMonthlyCostEl.parentElement;
         const existingOriginalCost = monthlyCostContainer.querySelector('.original-cost-display');
@@ -1946,7 +1982,24 @@
         summaryInternetDiscountEl.textContent = `- ${(results.internetDiscountAmount + results.cardDiscount).toLocaleString()}원`;
         summaryMobileDiscountEl.textContent = `- ${results.totalMobileDiscount.toLocaleString()}원`;
 
-        // DETAILS SECTION
+        suggestionBarEl.classList.add('hidden');
+        const suggestion = await findBestDiscountAlternative(results);
+
+        if (suggestion.isBetter) {
+            suggestionNameEl.textContent = suggestion.name;
+            suggestionBenefitEl.textContent = suggestion.benefitText;
+            suggestionBarEl.classList.remove('hidden');
+
+            suggestionButtonEl.onclick = () => {
+                const radioToSelect = document.querySelector(`input[name="discountType"][value="${suggestion.value}"]`);
+                if (radioToSelect) {
+                    radioToSelect.checked = true;
+                    radioToSelect.dispatchEvent(new Event('change', { 'bubbles': true }));
+                    calculateButton.click();
+                }
+            };
+        }
+
         selectedInternetEl.textContent = results.selectedOptions.internetPlan && results.selectedOptions.internetPlan.price > 0 ? `${results.selectedOptions.internetPlan.name} (${results.selectedOptions.internetPlan.price.toLocaleString()}원)` : '미선택';
         selectedTvEl.textContent = results.selectedOptions.tvPackage ? results.selectedOptions.tvPackage.name : '미선택';
         selectedStbEl.textContent = results.selectedOptions.additionalStb ? results.selectedOptions.additionalStb.name : (results.selectedOptions.tvPackage ? "기본 셋톱 사용" : "미선택");
@@ -1966,7 +2019,6 @@
         totalInternetDiscountAmountEl.textContent = results.internetDiscountAmount.toLocaleString();
         internetDiscountBreakdownEl.textContent = results.internetDiscountBreakdownText;
         
-        // Card discount display
         cardDiscountSummaryContainerEl.classList.toggle('hidden', results.cardDiscount <= 0);
         if (results.cardDiscount > 0) {
             totalCardDiscountAmountEl.textContent = results.cardDiscount.toLocaleString();
@@ -1991,7 +2043,7 @@
 
         finalMonthlyCostEl.textContent = results.finalMonthlyCost.toLocaleString();
         finalCostLabelTextEl.textContent = "최종 예상 월 납부액";
-        const totalActualDiscountIfApplied = results.totalBaseSum - (results.finalMonthlyCost + results.cardDiscount) ; // Adjust base for qualifier
+        const totalActualDiscountIfApplied = results.totalBaseSum - (results.finalMonthlyCost + results.cardDiscount) ;
         if (results.selectedOptions.bundleApplicationTime === 'post' && totalActualDiscountIfApplied > 0) {
             finalCostLabelQualifierEl.textContent = ` (할인 전)`;
         } else if (totalActualDiscountIfApplied > 0 || results.cardDiscount > 0) {
@@ -2034,7 +2086,6 @@
         resultSection.classList.remove('hidden');
         messageScriptSectionEl.classList.remove('hidden');
         generateMessageScriptsSkt(results);
-        // Generate new static scripts
         generateTcoScript('100M');
         generatePenaltyAnalysisScript();
         generateWaiverInfoScript();
@@ -2051,8 +2102,8 @@
             return;
         }
 
-        const results100M = calculatePlanDetails(planId100M);
-        const results500M = calculatePlanDetails(planId500M);
+        const results100M = calculatePlanDetails({internetPlanId: planId100M});
+        const results500M = calculatePlanDetails({internetPlanId: planId500M});
 
         const wiredScript100M = generateWiredScript(results100M);
         const wiredScript500M = generateWiredScript(results500M);
@@ -2090,6 +2141,54 @@ ${wiredScript500M}
         alert('100M vs 500M 비교 스크립트가 생성되었습니다!');
     }
 
+    function generateBundleComparisonScript() {
+        const currentDiscountType = document.querySelector('input[name="discountType"]:checked').value;
+        if (currentDiscountType !== '요즘가족결합' && currentDiscountType !== '온가족할인') {
+            alert('비교를 위해 먼저 \'요즘가족결합\' 또는 \'온가족할인\'을 선택해주세요.');
+            return;
+        }
+        
+        const onGajokYearsSelectedText = onGajokYearsEl.options[onGajokYearsEl.selectedIndex].text;
+
+        const resultsYozoom = calculatePlanDetails({ discountType: '요즘가족결합' });
+        const resultsOngajok = calculatePlanDetails({ discountType: '온가족할인' });
+
+        const totalBenefitYozoom = resultsYozoom.internetDiscountAmount + resultsYozoom.totalMobileDiscount;
+        const totalBenefitOngajok = resultsOngajok.internetDiscountAmount + resultsOngajok.totalMobileDiscount;
+
+        let conclusion = '';
+        if (totalBenefitOngajok > totalBenefitYozoom) {
+            conclusion = `[최종 결론]\n고객님의 경우 가족 총 사용 연수(${onGajokYearsSelectedText})가 길어, '온가족할인'이 월 ${(totalBenefitOngajok - totalBenefitYozoom).toLocaleString()}원 더 유리합니다. 👍`;
+        } else if (totalBenefitYozoom > totalBenefitOngajok) {
+            conclusion = `[최종 결론]\n고객님의 경우 '요즘가족결합'이 월 ${(totalBenefitYozoom - totalBenefitOngajok).toLocaleString()}원 더 유리합니다. 👍`;
+        } else {
+            conclusion = `[최종 결론]\n두 할인 유형의 월 통신비 절약 효과는 동일하며, 고객님께 편한 방식으로 선택하시면 됩니다. 😊`;
+        }
+
+        const comparisonScript = `[미소] 요즘가족결합 vs 온가족할인 비교 안내
+
+고객님께 가장 유리한 할인 방식을 찾으실 수 있도록 두 가지 결합의 상세 내용을 비교해 드립니다.
+(현재 선택하신 인터넷/TV/휴대폰 요금제 기준)
+
+1️⃣ 요즘가족결합
+• 월 최종 요금: ${resultsYozoom.finalMonthlyCost.toLocaleString()}원
+• 인터넷 할인: -${resultsYozoom.internetDiscountAmount.toLocaleString()}원
+• 휴대폰 총 할인: -${resultsYozoom.totalMobileDiscount.toLocaleString()}원
+• 총 월 혜택: -${totalBenefitYozoom.toLocaleString()}원
+
+2️⃣ 온가족할인 (${onGajokYearsSelectedText})
+• 월 최종 요금: ${resultsOngajok.finalMonthlyCost.toLocaleString()}원
+• 인터넷 할인: -${resultsOngajok.internetDiscountAmount.toLocaleString()}원
+• 휴대폰 총 할인: -${resultsOngajok.totalMobileDiscount.toLocaleString()}원
+• 총 월 혜택: -${totalBenefitOngajok.toLocaleString()}원
+--------------------
+${conclusion}`;
+
+        infoScriptEl.value = comparisonScript.trim();
+        alert('요즘가족결합 vs 온가족할인 비교 스크립트가 생성되었습니다!');
+    }
+
+
     function generateWiredScript(results) {
         let script = '[유선 상품]';
         const { internetPlan, tvPackage, additionalStb, additionalTv, phonePlan, wifi } = results.selectedOptions;
@@ -2115,7 +2214,6 @@ ${wiredScript500M}
     }
     
     function generateMessageScriptsSkt(results) {
-        // --- START: Script 2. 상품 안내 문자 (Info Script) ---
         const wiredScript = generateWiredScript(results);
         
         let finalSummaryScript = '\n\n[최종 요금 및 혜택]';
@@ -2160,10 +2258,7 @@ ${maxGiftAmount.toLocaleString()} 원
 고객님께서 오늘 상담 받으신 상품 안내드립니다.
 ${wiredScript}${finalSummaryScript}
 ${eventScript}`;
-        // --- END: Info Script ---
 
-
-        // --- START: Script 1. 전산 메모 (Memo Script) ---
         const { internetPlan, tvPackage, additionalStb, additionalTv, phonePlan, wifi, bundleApplicationTime, discountType, discountTypeName, isDongpan, onGajokYearsKey, numMobileLines, selectedCardName } = results.selectedOptions;
         const monthlyFeeTextForMemo = `월 ${results.totalBaseSum.toLocaleString()}원(할인전)${bundleApplicationTime === 'pre' && (results.totalBaseSum - (results.finalMonthlyCost + results.cardDiscount) > 0) ? ` / 월 ${(results.finalMonthlyCost + results.cardDiscount).toLocaleString()}원(결합할인적용)`: ''}${results.cardDiscount > 0 ? ` / 월 ${results.finalMonthlyCost.toLocaleString()}원(카드할인 최종)` : ''}`;
         
@@ -2224,10 +2319,7 @@ ${eventScript}`;
     9. 모바일결합회선: ${numMobileLines}개
     10. 동판판매가적용: ${isDongpan ? 'Y' : 'N'}
     11. 제휴카드: ${selectedCardName ? selectedCardName : '미적용'}` + (isDongpan ? baekmegaMemo : '') + requiredGuidanceMemo;
-        // --- END: Memo Script ---
 
-
-        // --- START: Script 3. 가입 완료 문자 (Complete Script) ---
         let productDescriptionComplete = `▶️ ${internetPlan.name.split(' (')[0]}`;
         if (wifi && wifi.id !== 'wifi_router_not_selected') productDescriptionComplete += `\n▶️ ${wifi.name.split(' (')[0]}`;
         if (tvPackage) {
@@ -2269,10 +2361,7 @@ ${eventScript}`;
     [미소를 소개해주세요]
     지인이 미소에서 인터넷/TV 설치하면 소개해주신 분에게 현금 혜택을 드려요! (자세한 내용은 문의)
     미소 드림.`;
-        // --- END: Complete Script ---
-
         
-        // --- Other Scripts (Unchanged from previous logic) ---
         if (usimDongpanCompleteScriptEl) {
             usimDongpanCompleteScriptEl.value = `[미소] 유심 접수 완료 안내
     안녕하세요, 고객님.
@@ -2294,7 +2383,6 @@ https://miso.kr/booking/forms/secure-details?querystring=고객님 전화번호`
         }
     }
     
-    // --- NEW STATIC SCRIPT GENERATORS ---
     function generateTcoScript(speed) {
         let scriptContent = '';
         if (speed === '100M') {
@@ -2423,7 +2511,6 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
         window.getSelection().removeAllRanges(); 
     }
     
-    // --- AI 스크립트 생성 함수 ---
     async function generateAIPersuasionScript() {
         const consultationText = aiConsultationInputEl.value;
         if (!consultationText.trim()) {
@@ -2435,19 +2522,15 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
         generateAiScriptButtonEl.disabled = true;
         aiResultScriptEl.value = "";
     
-        const apiKey = "AIzaSyDyhCvqgf6HW32Dj0BBBanwijfvtee9P4s"; // API 키는 그대로 유지합니다.
+        const apiKey = "";
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
     
-        // ======================= ⬇️ 여기부터 변경 ⬇️ =======================
-    
-        // 1. 새로 추가된 'AI 고급 설정' UI에서 값들을 가져옵니다.
         const role = document.getElementById('aiRoleInput').value || "베테랑 통신 상담원";
         const tone = document.getElementById('aiToneSelect').value || "전문적이고 신뢰감 있는";
         const audience = document.getElementById('aiAudienceInput').value || "인터넷 가입을 고민하는 고객";
         const emotion = document.getElementById('aiEmotionInput').value || "더 나은 통신 서비스에 대한 기대감";
         const structure = document.getElementById('aiStructureSelect').value || "공감 -> 핵심 혜택 강조 -> 결정 촉구";
     
-        // 2. 마스터 프롬프트를 기반으로 최종 프롬프트를 동적으로 조립합니다.
         const prompt = `
     ### 지시 시작 ###
     1. 페르소나 및 에토스 설정:
@@ -2474,7 +2557,7 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
     - 분량: 전체 글의 길이는 약 3~4 문단으로 제한합니다.
     - 형식: 제목 없이 바로 시작하는 문자 메시지 형식으로 작성하세요. 이모티콘(😊, ✅, 👍)을 1~3개 적절히 사용하여 친근함을 더하세요.
     - ======================= ⬇️ 여기부터 추가된 규칙 ⬇️ =======================
-    - **매우 중요**: 메시지는 반드시 아래의 두 줄로 정확히 시작해야 합니다. 다른    인사말로 시작해서는 절대 안 됩니다.
+    - **매우 중요**: 메시지는 반드시 아래의 두 줄로 정확히 시작해야 합니다. 다른   인사말로 시작해서는 절대 안 됩니다.
     안녕하세요 고객님 !!
     미소인터넷 가입부서 김홍식 팀장입니다
     - **주의사항**: '아까', '오늘 오전에', '어제 상담드렸던' 등 상담 시점을 유추할 수 있는 시간 관련 표현은 절대 사용하지 마세요. 메시지는 언제 보내도 어색하지 않아야 합니다.
@@ -2486,7 +2569,6 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
     ${consultationText}
     ---
     `;
-        // ======================= ⬆️ 여기까지 변경 ⬆️ =======================
     
         try {
             const response = await fetch(apiUrl, {
@@ -2525,7 +2607,6 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
     }
 
 
-    // Initialize
     function setInitialDefaults() {
         initializeSelects(); 
     
