@@ -41,11 +41,11 @@
         .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%;}
         input:checked + .slider { background-color: #ef4444; /* red-500 */ }
         input:checked + .slider:before { transform: translateX(20px); }
-        .discount-details { background-color: #ffe4e6; border: 1px solid #ffb3b3; padding: 0.75rem; border-radius: 0.375rem; font-size:0.875rem; } /* Light red for SKT */
-        .discount-details ul { padding-left: 1.25rem; }
-        .discount-details ul ul { padding-left: 1rem; }
-        .discount-details h4 { font-weight: 600; margin-top: 0.75rem; margin-bottom: 0.25rem; color: #be123c; } /* Darker red for subheadings */
-        .discount-details strong { color: #dc2626; } /* SKT Red for emphasis */
+        .discount-details { background-color: #ffe4e6; border: 1px solid #ffb3b3; padding: 1rem; border-radius: 0.375rem; font-size:0.875rem; } /* Light red for SKT */
+        .discount-details ul { padding-left: 1.25rem; list-style-type: disc; margin-bottom: 0.75rem;}
+        .discount-details ul ul { padding-left: 1rem; list-style-type: circle;}
+        .discount-details h4 { font-weight: 600; margin-top: 0.75rem; margin-bottom: 0.25rem; color: #be123c; /* Darker red for subheadings */ }
+        .discount-details strong { color: #dc2626; /* SKT Red for emphasis */ }
         .summary-item { margin-bottom: 0.25rem; }
         .message-script-area { width: 100%; min-height: 150px; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 0.375rem; font-size: 0.875rem; white-space: pre-wrap; word-wrap: break-word; }
         .copy-button-container { text-align: right; margin-top: 0.5rem; }
@@ -120,7 +120,7 @@
                 <div class="input-group">
                     <label for="tvPlan" class="input-label">B tv 요금제 (1번째 TV)</label>
                     <select id="tvPlan" class="select-field">
-                      </select>
+                        </select>
                 </div>
 
                 <div class="input-group">
@@ -134,7 +134,7 @@
                 <div class="input-group">
                     <label for="additionalTvPlan" class="input-label">추가 TV 선택 (2번째 TV)</label>
                     <select id="additionalTvPlan" class="select-field">
-                      </select>
+                        </select>
                 </div>
                 
                 <div class="input-group">
@@ -213,15 +213,45 @@
                     <p>인터넷 할인: <span id="detailYgInternetDiscount" class="font-bold">0</span>원 <span id="detailYgInternetType" class="text-xs"></span></p>
                     <p>휴대폰 총 할인 (참고용): <span id="detailYgMobileDiscount" class="font-bold">0</span>원</p>
                     <hr class="my-2 border-red-300">
-                    <div class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details">
-                        <p class="font-bold">주요 특징:</p><ul><li>인터넷 명의자 본인 모바일 1회선 필수 포함, 최대 5대 가족 모바일 결합.</li><li>명의 다른 가족 모바일 결합 시, 최대 2회선 인터넷 할인 적용 가능.</li></ul>
-                        <p class="font-bold mt-2">선결합 조건:</p><ul><li>인터넷 명의자 + 동일 명의 SKT 휴대폰 1대 필수.</li></ul>
-                        <p class="font-bold mt-2">최대 결합 가능 회선:</p><ul><li>인터넷 최대 2회선 + 모바일 5회선 (각각 명의자 및 장소 다르게 가능).</li></ul>
-                        <p class="font-bold mt-2">인터넷 할인 (JSON 기반):</p><ul id="yozoomGajokInternetDiscountTiers"></ul>
-                        <p class="font-bold mt-2">휴대폰 할인 (인터넷 속도 및 회선 수 기반, 참고용 - 기존 로직 유지):</p><ul id="yozoomGajokMobileDiscountTiers"></ul>
-                        <p class="font-bold mt-2">동거인 결합 가능:</p><ul><li>결합 대표자 기준 주민등록상 동일 주소 동거인 1인 가족 할인 대상 인정 (예비부부, 동거부부, 친구 등 등본상 동거인).</li></ul>
-                        <p class="font-bold mt-2">예시:</p><ul><li>아버지 명의 SK 핸드폰 개통 후 요즘 가족 결합/온가족할인 추가 가능 (모바일 명의 같이 들어와야 함.)</li></ul>
-                        <p class="mt-2 text-red-500 font-bold">참고: 모바일 할인액은 선택약정 등 타 할인과 중복 여부 SKT 확인 필요.</p>
+                    
+                    <div class="copy-button-container !mb-2">
+                        <button onclick="copySectionToClipboard('yozoomCopyContent', 'copyFeedbackYozoom')" class="btn-secondary text-xs !py-1 !px-2">상세 정보 복사</button>
+                        <span id="copyFeedbackYozoom" class="copy-feedback"></span>
+                    </div>
+
+                    <div id="yozoomCopyContent" class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details space-y-3">
+                        <div>
+                            <h4>주요 특징</h4>
+                            <ul>
+                                <li><strong>최대 회선:</strong> 인터넷 2회선 + 모바일 5회선</li>
+                                <li><strong>신청 방식:</strong> 선결합</li>
+                                <li><strong>핵심 조건:</strong> 인터넷 명의자 + 동일명의 휴대폰 1대 필수</li>
+                                <li>인터넷 최대 2회선 + 모바일 5회선 결합 시, 각각의 명의자 및 장소가 달라도 가능합니다.</li>
+                                <li>인터넷 회선을 추가 결합하기 위해서는, 반드시 모바일 회선 명의자가 결합 구성원에 포함되어 있어야 합니다.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>동거인 특별 규정 (1인 한정)</h4>
+                            <ul>
+                                <li>결합 대표자 기준 주민등록상 동일 주소에 거주하는 동거인 1인에 한해 가족 할인 대상으로 인정됩니다.</li>
+                                <li><strong>적용 예시:</strong> 본인 명의 인터넷 1회선 + 모바일 1회선으로 결합 가능, 예비 부부, 동거부부, 친구 등 등본상 동거인 포함 가능</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>상황별 시나리오 예시</h4>
+                            <ul>
+                                <li><strong>Case 1 (인터넷만 추가):</strong> 아버지 명의로 SK 인터넷만 추가 시 → 패밀리 결합으로 진행</li>
+                                <li><strong>Case 2 (폰 개통 후 결합):</strong> 아버지 명의로 SK 핸드폰 개통 후 결합 시 → 요즘 가족 결합 추가 가능 (모바일 명의가 결합에 포함되어야 함)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>인터넷 할인 (요금제별)</h4>
+                            <ul id="yozoomGajokInternetDiscountTiers"></ul>
+                        </div>
+                        <div>
+                            <h4>휴대폰 할인 (인터넷 속도 및 회선 수 기반, 참고용)</h4>
+                            <ul id="yozoomGajokMobileDiscountTiers"></ul>
+                        </div>
                     </div>
                 </div>
                 <div id="onGajokDetailsContainer" class="mt-3 hidden discount-details">
@@ -229,43 +259,113 @@
                     <p>인터넷 할인 (예상): <span id="detailOgInternetDiscount" class="font-bold">0</span>원</p>
                     <p>휴대폰 할인 (월정액 기준, 참고용): <span id="detailOgMobileDiscount" class="font-bold">0</span>%</p>
                     <hr class="my-2 border-red-300">
-                    <div class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details">
-                        <p class="font-bold">주요 특징:</p><ul><li>가족 구성원의 SKT 총 가입 연수와 인터넷 사용 기간에 따라 할인율 차등 적용.</li></ul>
-                        <p class="font-bold mt-2">최대 결합 가능 회선:</p><ul><li>모바일 최대 5회선 + 인터넷 2회선.</li></ul>
-                        <p class="font-bold mt-2">회선 추가 조건:</p><ul><li>추가 회선 명의자 휴대폰은 SKT 회선이어야 함.</li></ul>
-                        <p class="font-bold mt-2">인터넷 할인 (가족 총 연수 + 인터넷 사용 기간별 %):</p><ul id="onGajokInternetDiscountTiers"></ul>
-                        <p class="font-bold mt-2">휴대폰 할인:</p><ul><li>총 가입 연수 20년 이상 시: 대표 모바일 회선 월정액의 10% 할인.</li><li>총 가입 연수 30년 이상 시: 대표 모바일 회선 월정액의 30% 할인.</li><li>(선택약정할인과 중복 가능)</li></ul>
-                        <p class="font-bold mt-2">동거인 결합 가능:</p><ul><li>결합 대표자 기준 주민등록상 동일 주소 동거인 1인 가족 할인 대상 인정.</li></ul>
-                        <p class="font-bold mt-2">예시:</p><ul><li>아버지 명의 SK 핸드폰 개통 후 요즘 가족 결합/온가족할인 추가 가능 (모바일 명의 같이 들어와야 함.)</li></ul>
+                    
+                    <div class="copy-button-container !mb-2">
+                        <button onclick="copySectionToClipboard('ongajokCopyContent', 'copyFeedbackOngajok')" class="btn-secondary text-xs !py-1 !px-2">상세 정보 복사</button>
+                        <span id="copyFeedbackOngajok" class="copy-feedback"></span>
+                    </div>
+
+                    <div id="ongajokCopyContent" class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details space-y-3">
+                        <div>
+                            <h4>주요 특징</h4>
+                            <ul>
+                                <li><strong>최대 회선:</strong> 인터넷 2회선 + 모바일 2~5회선</li>
+                                <li><strong>할인 기준:</strong> 가족 합산 가입년수 및 인터넷 사용 기간에 따라 차등 할인</li>
+                                <li><strong>회선 추가 조건:</strong> 추가하는 회선 명의자의 핸드폰이 SKT여야 함</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>신청 방법 (SKT vs SKB)</h4>
+                            <ul>
+                                <li><strong>SKT (T월드/백메가 입력):</strong> 선결 가능</li>
+                                <li><strong>SKB (브로드밴드):</strong> 후결 (고객이 설치 후 30일 이내 본사 고객센터 통해 결합 요청 필요)</li>
+                            </ul>
+                        </div>
+                         <div>
+                            <h4>인터넷 할인율 (가족 총 연수 + 인터넷 사용 기간별 %)</h4>
+                            <ul id="onGajokInternetDiscountTiers"></ul>
+                        </div>
                     </div>
                 </div>
                 <div id="familySktDetailsContainer" class="mt-3 hidden discount-details">
                     <p class="font-semibold mb-1">패밀리결합 상세 (상담원 참고용):</p>
                     <p>자회선 인터넷 할인: <span id="detailFsInternetDiscount" class="font-bold">0</span>원</p>
                     <hr class="my-2 border-red-300">
-                    <div class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details">
-                        <p class="font-bold">주요 특징:</p><ul><li>본인 또는 직계가족의 SKT/SKB 인터넷(모회선)이 다른 장소에 있을 경우, 신규 추가 인터넷(자회선) 할인.</li><li>SKT는 SKT끼리, SKB는 SKB끼리 결합.</li></ul>
-                        <p class="font-bold mt-2">조건:</p><ul><li>본인 또는 직계가족 명의로 다른 장소에 SK 인터넷 회선이 있어야 함.</li></ul>
-                        <p class="font-bold mt-2">회선 구성:</p><ul><li>모회선 1회선 + 자회선 1회선.</li></ul>
-                        <p class="font-bold mt-2">할인액 (JSON 기반, 자회선 기준):</p><ul id="familyInternetDiscountTiers"></ul>
-                        <p class="font-bold mt-2">예시:</p><ul><li>아버지 명의 SK 인터넷 추가 하고 싶어함 --&gt; 요즘 가족 결합 또는 온가족 할인 불가 , 패밀리 결합 진행</li></ul>
-                        <p class="font-bold mt-2">유의사항:</p><ul><li>모회선 1년 유지 필수, 미유지 시 할인액 반환.</li><li>10개월 이내 해지 시 사은품 환수 가능.</li></ul>
-                        <p class="font-bold mt-2">결합 방법:</p><ul><li>SKT: 본인 신분증, 모회선 가족관계증명서, 모회선 정보로 선결합 가능.</li><li>SKB 본인 패밀리: SKT와 동일, 선결합 가능.</li><li>SKB 타인 패밀리: 본사를 통한 후결합만 가능.</li></ul>
+
+                    <div class="copy-button-container !mb-2">
+                        <button onclick="copySectionToClipboard('familyCopyContent', 'copyFeedbackFamily')" class="btn-secondary text-xs !py-1 !px-2">상세 정보 복사</button>
+                        <span id="copyFeedbackFamily" class="copy-feedback"></span>
+                    </div>
+
+                    <div id="familyCopyContent" class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details space-y-3">
+                        <div>
+                            <h4>핵심 조건</h4>
+                            <ul>
+                                <li><strong>대상:</strong> 본인 또는 직계가족 명의로 다른 장소에 SK 인터넷 회선(모회선)이 있는 경우, 신규 인터넷(자회선) 할인 적용</li>
+                                <li><strong>구조:</strong> 모회선 1회선 + 자회선 1회선 (1:1 결합)</li>
+                                <li><strong>결합 원칙:</strong> SKT는 SKT끼리, SKB는 SKB끼리 결합</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>신청 방법 상세</h4>
+                            <ul>
+                                <li><strong>SKT (본인/가족):</strong> 선결 가능. (필요서류: 본인 신분증, 모회선 기준 가족관계증명서, 모회선 정보)</li>
+                                <li><strong>SKB (본인 명의):</strong> 선결 가능. (SKT와 동일, 모회선 설치 주소 확인)</li>
+                                <li><strong>SKB (가족 명의):</strong> 후결. (본사 통한 후결합, 가족관계증명서 제출)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>주의 사항 (할인 반환)</h4>
+                            <ul>
+                                <li>모회선 1년 유지 필수, 미유지 시 할인 금액 반환됩니다.</li>
+                                <li>10개월 이내 해지 시 사은품 환수될 수 있습니다.</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>인터넷 할인액 (자회선 기준)</h4>
+                            <ul id="familyInternetDiscountTiers"></ul>
+                        </div>
                     </div>
                 </div>
                 <div id="mvnoSktDetailsContainer" class="mt-3 hidden discount-details">
                     <p class="font-semibold mb-1">알뜰한 결합 상세 (상담원 참고용):</p>
                     <p>인터넷 할인: <span id="detailMsInternetDiscount" class="font-bold">0</span>원</p>
                     <hr class="my-2 border-red-300">
-                    <div class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details">
-                        <p class="font-bold">주요 특징:</p><ul><li>SKB 인터넷 + 본인 명의 알뜰폰 1:1 결합 (SKB만 가능).</li></ul>
-                        <p class="font-bold mt-2">대상:</p><ul><li>30일 이내 SKB 신규 가입 고객 또는 SKB 약정 종료 고객.</li></ul>
-                        <p class="font-bold mt-2">할인액 (JSON 기반, 인터넷 속도별):</p><ul id="mvnoInternetDiscountTiers"></ul>
-                        <p class="font-bold mt-2">결합 불가:</p><ul><li>SKT 및 법인 회선.</li><li>선불폰, IOT 요금제, 데이터 쉐어링, 태블릿 등 미협의 요금제.</li><li>알뜰폰 통신사 변경 시 재결합 불가.</li></ul>
-                        <p class="font-bold mt-2">결합 가능 알뜰폰 사업자 (예시):</p><ul><li>KB 국민은행(리브엠모바일), 큰사람커넥트(이야기모바일), 유니컴즈(모빙), 토스, 아이즈비전, SK텔링크(세븐모바일), 티플러스(KTC), 스마텔 등 (전체 목록 SKB 확인).</li></ul>
+                    
+                    <div class="copy-button-container !mb-2">
+                        <button onclick="copySectionToClipboard('mvnoCopyContent', 'copyFeedbackMvno')" class="btn-secondary text-xs !py-1 !px-2">상세 정보 복사</button>
+                        <span id="copyFeedbackMvno" class="copy-feedback"></span>
+                    </div>
+
+                    <div id="mvnoCopyContent" class="text-xs mt-2 mb-1 text-red-700 font-semibold skt-summary-details space-y-3">
+                        <div>
+                            <h4>결합 조건 (SKB 전용)</h4>
+                            <ul>
+                                <li><strong>대상 고객:</strong> 30일 이내 SKB 신규 가입 고객 또는 SKB 약정 종료 고객</li>
+                                <li><strong>결합 구조:</strong> SKB 인터넷(본인) + 알뜰폰(본인) 1:1 결합만 가능</li>
+                                <li><strong>제한 사항:</strong> 가족 명의 불가, SKT 및 법인 결합 불가</li>
+                                <li><strong>통신사 변경 시:</strong> 알뜰폰 통신사 변경 시 결합 해지 후 재결합 불가</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>주요 결합 가능 알뜰폰 사업자 (예시)</h4>
+                            <ul>
+                                <li>KB 국민은행(리브엠모바일), 큰사람커넥트(이야기모바일), 유니컴즈(모빙), 토스, 아이즈 비전, SK텔링크(세븐모바일), 티플러스(KTC), 스마텔(SMT) 등</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>결합 불가 요금제 예시</h4>
+                            <ul>
+                                <li>선불폰, IOT요금제, 데이터 쉐어링, 태블릿 등 협의되지 않은 요금제</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4>인터넷 할인액 (속도별)</h4>
+                            <ul id="mvnoInternetDiscountTiers"></ul>
+                        </div>
                     </div>
                 </div>
-            </div>
+                </div>
         </section>
 
         <section class="mb-8">
@@ -398,11 +498,11 @@
                             <p class="result-label summary-item">선택 와이파이: <span id="selectedWifi" class="result-value"></span></p>
                         </div>
                         <div>
-                             <p class="result-label summary-item">모바일 회선 수: <span id="selectedMobileCount" class="result-value"></span></p>
-                             <p class="result-label summary-item">적용 할인 유형: <span id="selectedDiscountType" class="result-value"></span></p>
-                             <div id="onGajokYearsResultContainer" class="hidden result-label summary-item">
-                                 온가족 총 사용 연수: <span id="selectedOnGajokYears" class="result-value"></span>
-                             </div>
+                            <p class="result-label summary-item">모바일 회선 수: <span id="selectedMobileCount" class="result-value"></span></p>
+                            <p class="result-label summary-item">적용 할인 유형: <span id="selectedDiscountType" class="result-value"></span></p>
+                            <div id="onGajokYearsResultContainer" class="hidden result-label summary-item">
+                                온가족 총 사용 연수: <span id="selectedOnGajokYears" class="result-value"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -877,10 +977,10 @@
         const tvSelected = tvPlanEl.value !== 'none';
     
         const isYozoomWifiCondition = internetPlanInfo &&
-                                          internetPlanInfo.speed_mbps === 100 &&
-                                          selectedInternetType === 'bundle' &&
-                                          tvSelected &&
-                                          selectedDiscountType === 'noBundleDiscount';
+                                        internetPlanInfo.speed_mbps === 100 &&
+                                        selectedInternetType === 'bundle' &&
+                                        tvSelected &&
+                                        selectedDiscountType === 'noBundleDiscount';
     
         if (isYozoomWifiCondition) {
             wifiRouterEl.value = "wifi_router_yozoom_100M_tv";
@@ -1192,7 +1292,7 @@
                 const wasSelectedAndIsNowDisabled = optionToModify.selected && shouldDisableTplanSave;
                 
                 optionToModify.disabled = shouldDisableTplanSave;
-    
+
                 if (wasSelectedAndIsNowDisabled) {
                     const firstAvailableOption = Array.from(select.options).find(opt => !opt.disabled);
                     if (firstAvailableOption) {
@@ -1241,7 +1341,7 @@
                  const defaultPlanId = allMobilePlans.find(p => p.name === 'T플랜세이브' && p.price === 33000)?.id || allMobilePlans[0]?.id;
                  select.value = defaultPlanId;
             }
-    
+
             const contractDiv = document.createElement('div');
             contractDiv.className = 'mt-2';
             
@@ -1269,7 +1369,7 @@
                 }
                  updateVisibleDetails();
             };
-    
+
             select.addEventListener('change', recalculateOnChange);
             contractCheckbox.addEventListener('change', recalculateOnChange);
         }
@@ -1365,7 +1465,7 @@
              if (onGajokInternetDiscountTiersEl) onGajokInternetDiscountTiersEl.innerHTML = '<li>해당 속도의 단독 요금제 정보를 찾을 수 없습니다.</li>';
              return;
         }
-    
+
         const internetPriceForCalc = standalonePlanForOnGajok.price; 
         const yearsKey = onGajokYearsEl.value;
         const internetYearsKey = internetUsageYearsEl.value;
@@ -1586,12 +1686,12 @@
         if (wifiAddon) {
             originalWifiPrice = wifiAddon.price; 
              if (wifiAddon.id === "wifi_router_yozoom_100M_tv") {
-                if (finalInternetPlan.speed_mbps === 100 && selectedInternetTypeRadio === 'bundle' && tvPackage) { 
-                    currentWifiComponentCost = wifiAddon.price; 
-                } else {
-                     currentWifiComponentCost = 0; 
-                     originalWifiPrice = 0; 
-                }
+                 if (finalInternetPlan.speed_mbps === 100 && selectedInternetTypeRadio === 'bundle' && tvPackage) { 
+                     currentWifiComponentCost = wifiAddon.price; 
+                 } else {
+                      currentWifiComponentCost = 0; 
+                      originalWifiPrice = 0; 
+                 }
             } else {
                 currentWifiComponentCost = wifiAddon.price;
             }
@@ -1676,7 +1776,7 @@
                      wifiBaseForOnGajokDiscount = wifiAddon.price; 
                 }
             }
-    
+
             if (wifiBaseForOnGajokDiscount > 0) {
                 const wifiDiscountRate = onGajokDiscountConfig.internet_discount_rate[selectedYearsKeyOnGajok]?.[selectedInternetUsageKey] || 0;
                 wifiDiscountForOnGajok = Math.floor(wifiBaseForOnGajokDiscount * wifiDiscountRate);
@@ -1690,7 +1790,7 @@
             }
         }
          if (selectedBundleApplicationTime === 'post' && discountType !== "온가족할인") { 
-            actualWifiCostComponent = currentWifiComponentCost;
+             actualWifiCostComponent = currentWifiComponentCost;
         }
         
         let totalSumBeforeDiscountForAllServices = 
@@ -1848,7 +1948,7 @@
                         else if (tvPackage.name.includes("스탠다드")) tvCategoryForDongpan = "Standard";
                         else if (tvPackage.name.includes("ALL")) tvCategoryForDongpan = "All";
                     }
-    
+
                     if (dongpanGiftTable[mobileFeeTier] && dongpanGiftTable[mobileFeeTier][internetTypeForDongpan] &&
                         dongpanGiftTable[mobileFeeTier][internetTypeForDongpan][tvCategoryForDongpan] !== undefined) {
                         additionalDongpanCashSum += dongpanGiftTable[mobileFeeTier][internetTypeForDongpan][tvCategoryForDongpan];
@@ -2238,13 +2338,13 @@ ${maxGiftAmount.toLocaleString()} 원
 
 [✨추가 혜택 이벤트 상세 안내✨]
 혜택 1. 생생한 후기 남기고 현금 받기! (최대 4만원)
- 블로그, 인스타그램 등 개인 SNS에 미소 인터넷 설치 후기를 남겨주세요.
- 개인 SNS 계정 1곳당 후기 1건에 1만원씩, 최대 4곳에 작성하여 총 4만원의 혜택을 받으실 수 있습니다.
- (사진과 함께 정성스러운 후기를 남겨주시면 혜택 지급에 도움이 됩니다!)
+ 블로그, 인스타그램 등 개인 SNS에 미소 인터넷 설치 후기를 남겨주세요.
+ 개인 SNS 계정 1곳당 후기 1건에 1만원씩, 최대 4곳에 작성하여 총 4만원의 혜택을 받으실 수 있습니다.
+ (사진과 함께 정성스러운 후기를 남겨주시면 혜택 지급에 도움이 됩니다!)
 
- 혜택 2. 좋은 건 함께! 지인 추천하고 현금 받기! (3만원)
- 주변에 인터넷 가입을 고민하는 친구나 가족이 있다면 미소를 추천해주세요!
- 지인분께서 고객님의 추천으로 가입 및 설치를 완료하시면, 추천해주신 고객님께 현금 사은품 3만원을 드립니다.
+ 혜택 2. 좋은 건 함께! 지인 추천하고 현금 받기! (3만원)
+ 주변에 인터넷 가입을 고민하는 친구나 가족이 있다면 미소를 추천해주세요!
+ 지인분께서 고객님의 추천으로 가입 및 설치를 완료하시면, 추천해주신 고객님께 현금 사은품 3만원을 드립니다.
 
 ▶️ 참여 방법
 1. SNS에 후기를 작성하신 후, 해당 링크를 저희에게 문자로 보내주세요.
@@ -2510,6 +2610,44 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
         }
         window.getSelection().removeAllRanges(); 
     }
+
+    // --- New Copy Function for DIV Content ---
+    function copySectionToClipboard(contentElementId, feedbackElementId) {
+        const contentElement = document.getElementById(contentElementId);
+        if (!contentElement) {
+            console.error("Content element to copy not found:", contentElementId);
+            return;
+        }
+
+        const tempTextArea = document.createElement('textarea');
+        tempTextArea.value = contentElement.innerText;
+        tempTextArea.style.position = 'fixed';
+        tempTextArea.style.left = '-9999px';
+        tempTextArea.style.top = '0';
+        document.body.appendChild(tempTextArea);
+        
+        tempTextArea.select();
+        tempTextArea.setSelectionRange(0, 99999);
+
+        try {
+            document.execCommand('copy');
+            const feedbackEl = document.getElementById(feedbackElementId);
+            if(feedbackEl) {
+                feedbackEl.textContent = '복사되었습니다!';
+                setTimeout(() => { feedbackEl.textContent = ''; }, 2000);
+            }
+        } catch (err) {
+            console.error('Copy failed', err);
+            const feedbackEl = document.getElementById(feedbackElementId);
+            if(feedbackEl) {
+                feedbackEl.textContent = '복사 실패';
+                setTimeout(() => { feedbackEl.textContent = ''; }, 2000);
+            }
+        } finally {
+            document.body.removeChild(tempTextArea);
+            window.getSelection().removeAllRanges();
+        }
+    }
     
     async function generateAIPersuasionScript() {
         const consultationText = aiConsultationInputEl.value;
@@ -2522,7 +2660,7 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
         generateAiScriptButtonEl.disabled = true;
         aiResultScriptEl.value = "";
     
-        const apiKey = "";
+        const apiKey = ""; // API 키 입력 필요
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${apiKey}`;
     
         const role = document.getElementById('aiRoleInput').value || "베테랑 통신 상담원";
@@ -2599,7 +2737,7 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
     
         } catch (error) {
             console.error("Error calling Gemini API:", error);
-            aiResultScriptEl.value = `오류가 발생했습니다: ${error.message}. 잠시 후 다시 시도해주세요.`;
+            aiResultScriptEl.value = `오류가 발생했습니다: ${error.message}. 잠시 후 다시 시도해주세요. (API 키가 유효한지 확인하세요)`;
         } finally {
             aiLoadingIndicatorEl.classList.add('hidden');
             generateAiScriptButtonEl.disabled = false;
@@ -2681,4 +2819,4 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
     window.onload = setInitialDefaults;
     </script>
 </body>
-</html>
+</html>               
