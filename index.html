@@ -399,7 +399,6 @@
             <div class="input-group bg-white p-6 rounded-lg shadow">
                 <label class="input-label">설치비</label>
                 <div class="space-y-2">
-                    <label class="radio-label"><input type="radio" name="installationTime" value="promo_waiver" class="radio-input"> 설치비 면제 프로모션</label>
                     <label class="radio-label"><input type="radio" name="installationTime" value="weekday" class="radio-input" checked> 평일 주간</label>
                     <label class="radio-label"><input type="radio" name="installationTime" value="weekend" class="radio-input"> 주말/야간</label>
                     <label class="radio-label"><input type="radio" name="installationTime" value="self_paid" class="radio-input"> 설치비 자체지급</label>
@@ -868,33 +867,34 @@
         "bundleInternetDiscounts": [{"bundle_name": "요즘가족결합","condition": "100M + TV","discount_amount": 3300}, {"bundle_name": "패밀리결합","condition": "100M + TV","discount_amount": 3300}, {"bundle_name": "알뜰한 결합","condition": "100M + TV","discount_amount": 3300}, {"bundle_name": "요즘가족결합","condition": "500M + TV","discount_amount": 6600}, {"bundle_name": "패밀리결합","condition": "500M + TV","discount_amount": 5500}, {"bundle_name": "알뜰한 결합","condition": "500M + TV","discount_amount": 6600}, {"bundle_name": "요즘가족결합","condition": "1GB + TV","discount_amount": 8800}, {"bundle_name": "패밀리결합","condition": "1GB + TV","discount_amount": 5500}, {"bundle_name": "알뜰한 결합","condition": "1GB + TV","discount_amount": 8800}, {"bundle_name": "요즘가족결합","condition": "100M (단독)","discount_amount": 4400}, {"bundle_name": "패밀리결합","condition": "100M (단독)","discount_amount": 5500}, {"bundle_name": "알뜰한 결합","condition": "100M (단독)","discount_amount": 4400}, {"bundle_name": "요즘가족결합","condition": "500M (단독)","discount_amount": 11000}, {"bundle_name": "패밀리결합","condition": "500M (단독)","discount_amount": 11000}, {"bundle_name": "알뜰한 결합","condition": "500M (단독)","discount_amount": 11000}, {"bundle_name": "요즘가족결합","condition": "1GB (단독)","discount_amount": 13200}, {"bundle_name": "패밀리결합","condition": "1GB (단독)","discount_amount": 11000}, {"bundle_name": "알뜰한 결합","condition": "1GB (단독)","discount_amount": 13200}],
         "installationFees": {
             "weekday": {
-                "internet_100_500_standalone": 36300,
-                "internet_tv": 34100,
-                "internet_tv_add": 34100,
+                "internet_standalone": 36300,
+                "internet_1g_standalone": 0,
+                "internet_1g_tv": 22000,
                 "internet_phone_landline": 44000,
                 "internet_phone_voip": 37400,
-                "internet_1g_standalone": 0,
-                "internet_1g_tv": 22000
+                "internet_tv": 56100,
+                "internet_tv_phone": 56100,
+                "internet_tv_add": 73700
             },
             "weekend": {
-                "internet_100_500_standalone": 45375,
-                "internet_tv": 42625,
-                "internet_tv_add": 42625,
+                "internet_standalone": 45375,
+                "internet_1g_standalone": 0,
+                "internet_1g_tv": 27500,
                 "internet_phone_landline": 51700,
                 "internet_phone_voip": 45100,
-                "internet_1g_standalone": 0,
-                "internet_1g_tv": 27500
+                "internet_tv": 70125,
+                "internet_tv_phone": 70125,
+                "internet_tv_add": 92125
             },
-            "promo_waiver": 0,
             "descriptions": {
-                "internet_100_500_standalone": "인터넷 (100M/500M)",
-                "internet_tv": "인터넷 + TV",
-                "internet_tv_add": "인터넷 + TV + 추가TV",
-                "internet_phone_landline": "인터넷 + 일반전화",
-                "internet_phone_voip": "인터넷 + 070전화",
-                "internet_1g_standalone": "1Giga 인터넷+WiFi (설치비 면제)",
-                "internet_1g_tv": "1Giga 인터넷+WiFi + TV",
-                "promo_waiver": "설치비 면제 프로모션",
+                "internet_standalone": "인터넷 설치비",
+                "internet_1g_standalone": "설치비 면제 (1Gb + 와이파이)",
+                "internet_1g_tv": "설치비 면제 (1Gb + 와이파이) + TV",
+                "internet_phone_landline": "인터넷 + 일반전화 설치비",
+                "internet_phone_voip": "인터넷 + 070전화 설치비",
+                "internet_tv": "인터넷 + TV 설치비",
+                "internet_tv_phone": "인터넷 + TV + 일반/070전화 설치비",
+                "internet_tv_add": "인터넷 + TV + TV추가 설치비",
                 "none": "서비스 미선택"
             }
         }
@@ -2070,35 +2070,33 @@
 
         const getFeeKey = () => {
             const hasInternetService = !!finalInternetPlan && finalInternetPlan.price > 0;
-            const is1Giga = hasInternetService && finalInternetPlan.speed_mbps >= 1000;
+            if (!hasInternetService) return 'none';
+
+            const is1Giga = finalInternetPlan.speed_mbps >= 1000;
             const hasTvService = !!tvPackage;
             const hasAdditionalTvService = !!additionalTvPackage;
             const hasPhoneService = !!phonePlan;
             const isLandline = hasPhoneService && phonePlan.id.includes('landline');
             const isVoip = hasPhoneService && !isLandline;
 
-            if (is1Giga) return hasTvService ? 'internet_1g_tv' : 'internet_1g_standalone';
-            if (hasInternetService) {
-                if (isLandline) return 'internet_phone_landline';
-                if (isVoip) return 'internet_phone_voip';
-                if (hasAdditionalTvService) return 'internet_tv_add';
-                if (hasTvService) return 'internet_tv';
-                return 'internet_100_500_standalone';
-            }
-            return 'none';
+            if (hasAdditionalTvService) return 'internet_tv_add';
+            if (hasTvService && hasPhoneService) return 'internet_tv_phone';
+            if (hasTvService) return is1Giga ? 'internet_1g_tv' : 'internet_tv';
+            if (isLandline) return 'internet_phone_landline';
+            if (isVoip) return 'internet_phone_voip';
+            if (is1Giga) return 'internet_1g_standalone';
+
+            return 'internet_standalone';
         };
 
-        if (installationTime === 'promo_waiver') {
-            feeDescriptionKey = 'promo_waiver';
-            calculatedInstallationFee = 0;
-        } else if (installationTime === 'self_paid') {
-            feeDescriptionKey = getFeeKey();
+        feeDescriptionKey = getFeeKey();
+
+        if (installationTime === 'self_paid') {
             installationFeeSupport = jsonData.installationFees.weekday[feeDescriptionKey] ?? 0;
             calculatedInstallationFee = 0;
         } else {
             const timeKey = installationTime;
-            feeDescriptionKey = getFeeKey();
-            calculatedInstallationFee = jsonData.installationFees[timeKey][feeDescriptionKey] ?? 0;
+            calculatedInstallationFee = jsonData.installationFees[timeKey]?.[feeDescriptionKey] ?? 0;
         }
     
         let baseInternetGift = 0;
