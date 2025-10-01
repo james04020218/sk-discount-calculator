@@ -2534,12 +2534,22 @@ ${conclusion}`;
             monthlyCostText += ` + 카드 자동이체 청구할인`;
         }
         finalSummaryScript += `\n${monthlyCostText} (VAT 별도)`;
+
+        if (results.installationFeeSupport > 0) {
+            finalSummaryScript += `\n▶️ 설치비 ${results.installationFeeSupport.toLocaleString()}원 지원`;
+        }
+
         finalSummaryScript += `\n▶️ 사은품 ${results.totalGiftAmount.toLocaleString()}원 (확정)`;
+
+        let ottHookScript = "";
+        if (results.selectedOptions.isOtt) {
+            ottHookScript = `\n\n✨ 지금 바로 접수해야 하는 이유! ✨\n[금일 접수 시] 70만원 상당의 종합OTT 6종(넷플릭스, 디즈니+ 등) 3년 무료!\n[익일 접수 시] OTT 혜택은 종료되고, 기본 사은품만 제공됩니다.`;
+        }
 
         infoScriptEl.value = `[웨이팅 인터넷 통합접수센터] 상품 & 사은품 요약 안내
 안녕하세요, 웨이팅 인터넷 통합접수센터 인터넷 입니다.
 고객님께서 오늘 상담 받으신 상품 안내드립니다.
-${wiredScriptForCustomer}${finalSummaryScript}`;
+${wiredScriptForCustomer}${finalSummaryScript}${ottHookScript}`;
 
         // For memo script, use VAT-inclusive prices
         const { internetPlan, tvPackage, additionalStb, additionalTv, phonePlan, wifi, bundleApplicationTime, discountType, discountTypeName, isDongpan, onGajokYearsKey, numMobileLines, selectedCardName } = results.selectedOptions;
@@ -2847,8 +2857,40 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
     }
     
     function setInitialDefaults() {
-        initializeSelects(); 
+        initializeSelects();
+
+        // Set default internet type to bundle
+        const bundleRadio = document.querySelector('input[name="internetType"][value="bundle"]');
+        if (bundleRadio) {
+            bundleRadio.checked = true;
+            bundleRadio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Set default internet plan to 500M+OTT
+        const internetPlanId = 'internet_500m_with_tv_ott';
+        if (internetPlanEl.querySelector(`option[value="${internetPlanId}"]`)) {
+            internetPlanEl.value = internetPlanId;
+            internetPlanEl.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Set default TV plan to B tv ALL
+        const tvPlanId = 'tv_all_smart3';
+        if (tvPlanEl.querySelector(`option[value="${tvPlanId}"]`)) {
+            tvPlanEl.value = tvPlanId;
+        }
+
+        // Set default affiliate card to the best one for 300k spend
+        const cardId = 'skt_samsung';
+        const cardTierIndex = '0';
+        if (affiliateCardSelectEl.querySelector(`option[value="${cardId}"]`)) {
+            affiliateCardSelectEl.value = cardId;
+            handleCardChange(); // This populates the tier dropdown
+            if (cardTierSelectEl.querySelector(`option[value="${cardTierIndex}"]`)) {
+                cardTierSelectEl.value = cardTierIndex;
+            }
+        }
     
+        // Keep other defaults
         const noBundleDiscountRadio = document.querySelector('input[name="discountType"][value="noBundleDiscount"]');
         if (noBundleDiscountRadio) {
             noBundleDiscountRadio.checked = true;
@@ -2856,34 +2898,12 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
             noBundleDiscountRadio.dispatchEvent(discountChangeEvent);
         }
         
-        const internetTypeStandaloneRadio = document.querySelector('input[name="internetType"][value="standalone"]');
-        if (internetTypeStandaloneRadio) { 
-            internetTypeStandaloneRadio.checked = true;
-        }
-        populateInternetPlansDropdown(); 
-        
-        const firstStandaloneInternet = jsonData.internetPlans_base[0]?.id;
-         if (internetPlanEl.querySelector(`option[value="${firstStandaloneInternet}"]`)) {
-             internetPlanEl.value = firstStandaloneInternet;
-        } else if (jsonData.internetPlans_base.length > 0) { 
-             internetPlanEl.value = jsonData.internetPlans_base[0].id;
-        } else {
-             internetPlanEl.value = 'none';
-        }
-        const internetPlanChangeEvent = new Event('change'); 
-        internetPlanEl.dispatchEvent(internetPlanChangeEvent); 
-    
-    
-        tvPlanEl.value = 'none'; 
         wifiRouterEl.value = "wifi_router_default"; 
         tvStbEl.value = 'none'; 
         additionalTvPlanEl.value = 'none';
         phonePlanEl.value = 'none';
-        
         dongpanSalesCheckEl.checked = false;
-        affiliateCardSelectEl.value = 'none';
-        handleCardChange();
-    
+
         const weekdayInstallRadio = document.querySelector('input[name="installationTime"][value="weekday"]');
         if(weekdayInstallRadio) weekdayInstallRadio.checked = true;
     
@@ -2907,8 +2927,10 @@ SKB 약관상, 가입 후 첫 8개월 동안은 위약금 감면이 적용되지
         onGajokYearsGroupEl.classList.toggle('hidden', document.querySelector('input[name="discountType"]:checked').value !== '온가족할인');
         internetUsageYearsGroupEl.classList.toggle('hidden', document.querySelector('input[name="discountType"]:checked').value !== '온가족할인');
         dongpanUsimPolicyDetailsContainerEl.classList.toggle('hidden', !dongpanSalesCheckEl.checked);
-        document.getElementById('commissionSection').classList.add('hidden');
         
+        const isOttPlan = internetPlanEl.value.includes('_ott');
+        document.getElementById('commissionSection').classList.toggle('hidden', !isOttPlan);
+
         resultSection.classList.add('hidden');
         messageScriptSectionEl.classList.add('hidden');
     
