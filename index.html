@@ -2590,6 +2590,22 @@ ${wiredScriptForCustomer}${finalSummaryScript}`;
     2. 이사 고객 Y / 추후 소명 발생 시 관련 서류 제출 동의 수긍
     3. 인터넷 설치 후 고객센터로 후결합 요청 안내 완료`;
 
+        const newMemoFields = `\n\n<추가 메모>
+    이름:
+    핸드폰 번호:
+    핸드폰 통신사:
+    주민번호:
+    설치할 주소:
+    사은품 받을 계좌번호:
+    사은품(상/현)/ 자체지급:
+    상품정보:
+    청구 금액:
+    제휴카드 반영시:
+    설치비 안내완:
+    인증연락30분후 가능:
+    설치일정:
+    기존사용 인터넷 통신사:`;
+
         memoScriptEl.value = `[SKB/SKT 웨이팅 인터넷 통합접수센터 상담 메모]
     1. 상품 : ${productDescriptionMemo}
     2. 요금 : ${monthlyFeeTextForMemo}
@@ -2601,7 +2617,7 @@ ${wiredScriptForCustomer}${finalSummaryScript}`;
     ${onGajokYearsResultContainerEl.classList.contains('hidden') ? '' : `8. 온가족총연수: ${onGajokYearsEl.options[onGajokYearsEl.selectedIndex].text}`}
     9. 모바일결합회선: ${numMobileLines}개
     10. 동판판매가적용: ${isDongpan ? 'Y' : 'N'}
-    11. 제휴카드: ${selectedCardName ? selectedCardName : '미적용'}` + (isDongpan ? baekmegaMemo : '') + requiredGuidanceMemo;
+    11. 제휴카드: ${selectedCardName ? selectedCardName : '미적용'}` + (isDongpan ? baekmegaMemo : '') + requiredGuidanceMemo + newMemoFields;
 
         let productDescriptionComplete = `▶️ ${internetPlan.name.split(' (')[0]}`;
         if (wifi && wifi.id !== 'wifi_router_not_selected') productDescriptionComplete += `\n▶️ ${wifi.name.split(' (')[0]}`;
